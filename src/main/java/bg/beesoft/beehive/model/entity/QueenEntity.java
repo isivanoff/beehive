@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Entity
 @Table(name = "queens")
-public class Queen extends BaseEntity{
+public class QueenEntity extends BaseEntity{
     @Column(nullable = false)
     boolean isAlive;
 
@@ -23,7 +23,7 @@ public class Queen extends BaseEntity{
         return isAlive;
     }
 
-    public Queen setAlive(boolean alive) {
+    public QueenEntity setAlive(boolean alive) {
         isAlive = alive;
         return this;
     }
@@ -32,7 +32,7 @@ public class Queen extends BaseEntity{
         return isMarked;
     }
 
-    public Queen setMarked(boolean marked) {
+    public QueenEntity setMarked(boolean marked) {
         isMarked = marked;
         return this;
     }
@@ -41,7 +41,7 @@ public class Queen extends BaseEntity{
         return dateOfMark;
     }
 
-    public Queen setDateOfMark(LocalDate dateOfMark) {
+    public QueenEntity setDateOfMark(LocalDate dateOfMark) {
         this.dateOfMark = dateOfMark;
         return this;
     }
@@ -50,7 +50,7 @@ public class Queen extends BaseEntity{
         return isActive;
     }
 
-    public Queen setActive(boolean active) {
+    public QueenEntity setActive(boolean active) {
         isActive = active;
         return this;
     }

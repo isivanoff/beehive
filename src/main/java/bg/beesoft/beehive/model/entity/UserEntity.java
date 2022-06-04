@@ -8,7 +8,7 @@ import java.util.List;
 @Table(name = "users")
 public class UserEntity extends BaseEntity{
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -19,6 +19,9 @@ public class UserEntity extends BaseEntity{
 
     @Column(nullable = false)
     private String lastName;
+
+    @Column(nullable = false)
+    private boolean isActive;
 
     private String imageUrl;
 
@@ -83,6 +86,16 @@ public class UserEntity extends BaseEntity{
         this.userRoles.add(userRole);
         return this;
     }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public UserEntity setActive(boolean active) {
+        isActive = active;
+        return this;
+    }
+
 
     @Override
     public String toString() {

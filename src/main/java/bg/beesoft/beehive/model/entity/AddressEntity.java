@@ -6,7 +6,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "addresses")
-public class Address extends BaseEntity {
+public class AddressEntity extends BaseEntity {
     @Column(nullable = false)
     private String country;
 
@@ -16,14 +16,13 @@ public class Address extends BaseEntity {
     @Column(nullable = false)
     private String street;
 
-    @Column(nullable = false)
     private String postcode;
 
     public String getCountry() {
         return country;
     }
 
-    public Address setCountry(String country) {
+    public AddressEntity setCountry(String country) {
         this.country = country;
         return this;
     }
@@ -32,7 +31,7 @@ public class Address extends BaseEntity {
         return city;
     }
 
-    public Address setCity(String city) {
+    public AddressEntity setCity(String city) {
         this.city = city;
         return this;
     }
@@ -41,7 +40,7 @@ public class Address extends BaseEntity {
         return street;
     }
 
-    public Address setStreet(String street) {
+    public AddressEntity setStreet(String street) {
         this.street = street;
         return this;
     }
@@ -50,7 +49,7 @@ public class Address extends BaseEntity {
         return postcode;
     }
 
-    public Address setPostcode(String postcode) {
+    public AddressEntity setPostcode(String postcode) {
         this.postcode = postcode;
         return this;
     }

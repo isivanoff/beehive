@@ -7,22 +7,20 @@ import java.util.List;
 @Table(name = "apiaries")
 public class ApiaryEntity extends BaseEntity{
 
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     private String name;
-
 
     private int area;
 
     private String imageUrl;
 
-    @OneToOne
-    private Address address;
+    @OneToOne(cascade = CascadeType.ALL ,optional = false)
+    private AddressEntity address;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private UserEntity beekeeper;
 
     @OneToMany(mappedBy = "apiary")
-
     private List<BeehiveEntity> beehives;
 
     public String getName() {
@@ -34,11 +32,11 @@ public class ApiaryEntity extends BaseEntity{
         return this;
     }
 
-    public Address getAddress() {
+    public AddressEntity getAddress() {
         return address;
     }
 
-    public ApiaryEntity setAddress(Address address) {
+    public ApiaryEntity setAddress(AddressEntity address) {
         this.address = address;
         return this;
     }

@@ -26,8 +26,8 @@ public class BeehiveEntity extends BaseEntity {
 
     private String imageUrl;
 
-    @OneToOne
-    private Queen queen;
+    @OneToOne(cascade = CascadeType.ALL ,optional = false)
+    private QueenEntity queen;
 
     @ManyToOne
     private ApiaryEntity apiary;
@@ -47,11 +47,11 @@ public class BeehiveEntity extends BaseEntity {
         return this;
     }
 
-    public Queen getQueen() {
+    public QueenEntity getQueen() {
         return queen;
     }
 
-    public BeehiveEntity setQueen(Queen queen) {
+    public BeehiveEntity setQueen(QueenEntity queen) {
         this.queen = queen;
         return this;
     }
