@@ -5,5 +5,6 @@ public enum TaskEnum {
     MEDICATION,
     HARVESTING,
     QUEENREPLACEMENT,
+    EXAMINATION,
     OTHER
 }

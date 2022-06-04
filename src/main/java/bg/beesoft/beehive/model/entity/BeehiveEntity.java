@@ -5,14 +5,13 @@ import bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum;
 import bg.beesoft.beehive.model.entity.enums.ColorEnum;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "beehives")
 public class BeehiveEntity extends BaseEntity {
 
-    private int number;
+    private int referenceNumber;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -22,13 +21,13 @@ public class BeehiveEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ColorEnum color;
 
-    private boolean hasQueen;
-
-    private LocalDate queenDate;
-
+    @Column(nullable = false)
     private boolean isAlive;
 
     private String imageUrl;
+
+    @OneToOne
+    private Queen queen;
 
     @ManyToOne
     private ApiaryEntity apiary;
@@ -39,14 +38,24 @@ public class BeehiveEntity extends BaseEntity {
     @OneToMany(mappedBy = "beehive")
     private List<TaskEntity> tasks;
 
-    public int getNumber() {
-        return number;
+    public int getReferenceNumber() {
+        return referenceNumber;
     }
 
-    public BeehiveEntity setNumber(int number) {
-        this.number = number;
+    public BeehiveEntity setReferenceNumber(int referenceNumber) {
+        this.referenceNumber = referenceNumber;
         return this;
     }
+
+    public Queen getQueen() {
+        return queen;
+    }
+
+    public BeehiveEntity setQueen(Queen queen) {
+        this.queen = queen;
+        return this;
+    }
+
 
     public BeeHiveTypeEnum getType() {
         return type;
@@ -63,24 +72,6 @@ public class BeehiveEntity extends BaseEntity {
 
     public BeehiveEntity setColor(ColorEnum color) {
         this.color = color;
-        return this;
-    }
-
-    public boolean isHasQueen() {
-        return hasQueen;
-    }
-
-    public BeehiveEntity setHasQueen(boolean hasQueen) {
-        this.hasQueen = hasQueen;
-        return this;
-    }
-
-    public LocalDate getQueenDate() {
-        return queenDate;
-    }
-
-    public BeehiveEntity setQueenDate(LocalDate queenDate) {
-        this.queenDate = queenDate;
         return this;
     }
 

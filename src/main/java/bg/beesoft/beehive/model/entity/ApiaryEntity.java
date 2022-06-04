@@ -10,14 +10,13 @@ public class ApiaryEntity extends BaseEntity{
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    private String address;
 
     private int area;
 
-    private int totalHives;
-
     private String imageUrl;
+
+    @OneToOne
+    private Address address;
 
     @ManyToOne
     private UserEntity beekeeper;
@@ -35,11 +34,11 @@ public class ApiaryEntity extends BaseEntity{
         return this;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
-    public ApiaryEntity setAddress(String address) {
+    public ApiaryEntity setAddress(Address address) {
         this.address = address;
         return this;
     }
@@ -50,15 +49,6 @@ public class ApiaryEntity extends BaseEntity{
 
     public ApiaryEntity setArea(int area) {
         this.area = area;
-        return this;
-    }
-
-    public int getTotalHives() {
-        return totalHives;
-    }
-
-    public ApiaryEntity setTotalHives(int totalHives) {
-        this.totalHives = totalHives;
         return this;
     }
 

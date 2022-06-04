@@ -15,10 +15,10 @@ public class TaskEntity extends BaseEntity{
     private LocalDate date;
 
     @Column(nullable = false)
-    private TaskEnum type;
+    private TaskEnum description;
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String description;
+    private String notes;
 
     @ManyToOne
     private BeehiveEntity beehive;
@@ -32,21 +32,21 @@ public class TaskEntity extends BaseEntity{
         return this;
     }
 
-    public TaskEnum getType() {
-        return type;
-    }
-
-    public TaskEntity setType(TaskEnum type) {
-        this.type = type;
-        return this;
-    }
-
-    public String getDescription() {
+    public TaskEnum getDescription() {
         return description;
     }
 
-    public TaskEntity setDescription(String description) {
+    public TaskEntity setDescription(TaskEnum description) {
         this.description = description;
+        return this;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public TaskEntity setNotes(String notes) {
+        this.notes = notes;
         return this;
     }
 
