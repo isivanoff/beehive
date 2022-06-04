@@ -1,6 +1,7 @@
 package bg.beesoft.beehive.service;
 
 import bg.beesoft.beehive.model.dto.UserLoginDTO;
+import bg.beesoft.beehive.model.dto.UserRegisterDTO;
 import bg.beesoft.beehive.model.entity.UserEntity;
 import bg.beesoft.beehive.model.user.CurrentUser;
 import bg.beesoft.beehive.repository.UserRepository;
@@ -35,7 +36,7 @@ public class UserService {
         boolean correctPassword = passwordEncoder.matches(enteredPassword, actualPassword);
 
         if (correctPassword) {
-            currentUser.setLoggedIn(true).setName(userOpt.get().getFirstName() + " " + userOpt.get().getLastName());
+            login(userOpt.get());
         } else {
             logout();
         }
@@ -43,7 +44,25 @@ public class UserService {
         return correctPassword;
     }
 
+    private void login(UserEntity userEntity) {
+        currentUser.setLoggedIn(true).setName(userEntity.getFirstName() + " " + userEntity.getLastName());
+    }
+
     public void logout() {
         currentUser.clear();
+    }
+
+    public void registerAndLogin(UserRegisterDTO userRegisterDTO) {
+        UserEntity newUser =
+                new UserEntity().
+                        setActive(true).
+                        setEmail(userRegisterDTO.getEmail()).
+                        setFirstName(userRegisterDTO.getFirstName()).
+                        setLastName(userRegisterDTO.getLastName()).
+                        setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
+
+        newUser = userRepository.save(newUser);
+
+        login(newUser);
     }
 }
