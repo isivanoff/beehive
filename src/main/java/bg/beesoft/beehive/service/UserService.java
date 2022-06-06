@@ -26,7 +26,7 @@ public class UserService {
     public boolean login(UserLoginDTO userLoginDTO) {
         Optional<UserEntity> userOpt = userRepository.findByEmail(userLoginDTO.getEmail());
 
-        if (userOpt.isEmpty()) {
+        if (userOpt.isEmpty() || !userOpt.get().isActive()) {
             return false;
         }
 
