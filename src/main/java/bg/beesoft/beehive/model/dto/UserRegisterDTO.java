@@ -1,10 +1,34 @@
 package bg.beesoft.beehive.model.dto;
 
+import javax.persistence.Column;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+
 public class UserRegisterDTO {
-    private String firstName;
-    private String lastName;
+
+    @NotEmpty
+    @Email
+    @Column(nullable = false,unique = true)
     private String email;
+    @NotEmpty
+    @Size(min=2, max=20)
+    @Column(nullable = false)
+    private String firstName;
+
+    @NotEmpty
+    @Size(min=2, max=20)
+    @Column(nullable = false)
+    private String lastName;
+
+    @NotEmpty
+    @Size(min=5, max=20)
+    @Column(nullable = false)
     private String password;
+
+    @NotEmpty
+    @Size(min=5, max=20)
+    @Column(nullable = false)
     private String confirmPassword;
 
     public String getFirstName() {

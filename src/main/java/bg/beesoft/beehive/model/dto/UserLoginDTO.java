@@ -1,7 +1,20 @@
 package bg.beesoft.beehive.model.dto;
 
+import javax.persistence.Column;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class UserLoginDTO {
+
+    @NotNull
+    @Email
+    @Column(nullable = false,unique = true)
     private String email;
+
+    @NotNull
+    @Size(min = 5,max = 20)
+    @Column(nullable = false,unique = true)
     private String password;
 
     public String getEmail() {

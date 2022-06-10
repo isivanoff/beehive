@@ -1,6 +1,9 @@
 package bg.beesoft.beehive.model.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +19,7 @@ public class UserEntity extends BaseEntity{
 
     @Column(nullable = false)
     private String firstName;
+
 
     @Column(nullable = false)
     private String lastName;
