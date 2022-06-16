@@ -9,7 +9,7 @@
 </head>
 <body>
 <div>
-    <nav class="navbar navbar-expand-lg bg-light navbar-light fixed-top">
+    <nav class="navbar nav-tabs navbar-expand-lg bg-light navbar-light fixed-top">
         <a class="navbar-brand" href="/"><img alt="beehive logo" src="/img/logo.png" class="logo"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -18,18 +18,18 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto col-12 justify-content-end">
-                <li class="nav-item" th:if="${@currentUser.isLoggedIn()}">
+                <li class="nav-item m-3" th:if="${@currentUser.isLoggedIn()}">
                     <a class="nav-link" th:href="@{/apiaries/all}">Моите пчелини</a>
                 </li>
 
-                <li class="nav-item" th:if="${@currentUser.isLoggedIn()}">
+                <li class="nav-item m-3" th:if="${@currentUser.isLoggedIn()}">
                     <a class="nav-link border border-warning" th:href="@{/apiaries/all}">+ Добави пчелин</a>
                 </li>
 
-                <li class="nav-item" th:if="${@currentUser.isLoggedIn()}">
+                <li class="nav-item m-3" th:if="${@currentUser.isLoggedIn()}">
                     <a class="nav-link" th:href="@{/users/profile}">Профил</a>
                 </li>
-                <li class="nav-item dropdown" th:if="${@currentUser.isLoggedIn()}">
+                <li class="nav-item m-3 dropdown" th:if="${@currentUser.isLoggedIn()}">
                     <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Админ
@@ -41,13 +41,13 @@
                         <a class="dropdown-item" href="/">Други</a>
                     </div>
                 </li>
-                <div class="logged-user nav-item" th:if="${@currentUser.isLoggedIn()}">Добре дошъл, <span
+                <div class="logged-user nav-item m-3" th:if="${@currentUser.isLoggedIn()}">Добре дошъл, <span
                         th:text="${@currentUser.getName()}"></span>!
                 </div>
 
 
-                <li class="nav-item" th:if="${@currentUser.isLoggedIn()}">
-                    <div class="form-inline my-2 my-lg-0 border px-3">
+                <li class="nav-item m-3" th:if="${@currentUser.isLoggedIn()}">
+                    <div class="form-inline my-2 my-lg-0 px-3">
                         <a class="nav-link" th:href="@{/users/logout}">Изход</a>
                     </div>
                 </li>
