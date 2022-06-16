@@ -5,9 +5,11 @@
 .container, .container-fluid {
      padding-top: 130px;
      text-align: center;
-     padding-bottom: 80px;
      min-height: 100%;
+}
 
+.container-fluid{
+    min-height: 780px;
 }
 
 form.main-form {
@@ -39,4 +41,16 @@ i {
 
 .form-control.shadow-0:focus {
   box-shadow: none;
+}
+
+.home-text img{
+    max-width: 720px;
+}
+
+.home-text{
+    background: white;
+    border-radius:10px;
+    padding:30px;
+    max-width: 790px;
+    margin: auto;
 }

@@ -53,7 +53,7 @@ public class UserService {
     }
 
     public void registerAndLogin(UserRegisterDTO userRegisterDTO) {
-        UserEntity newUser =
+         UserEntity newUser =
                 new UserEntity().
                         setActive(true).
                         setEmail(userRegisterDTO.getEmail()).
