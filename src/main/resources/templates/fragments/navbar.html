@@ -10,7 +10,7 @@
 <body>
 <div>
     <nav class="navbar nav-tabs navbar-expand-lg bg-light navbar-light fixed-top">
-        <a class="navbar-brand" href="/"><img alt="beehive logo" src="/img/logo.png" class="logo"></a>
+        <a class="navbar-brand" href="/"><img alt="beehive logo" src="/img/logo.png"  width="120" class="d-inline-block align-top" ></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -23,7 +23,7 @@
                 </li>
 
                 <li class="nav-item m-3" th:if="${@currentUser.isLoggedIn()}">
-                    <a class="nav-link border border-warning" th:href="@{/apiaries/all}">+ Добави пчелин</a>
+                    <a class="nav-link border border-warning" th:href="@{/apiaries/all}">+ Добави кошер</a>
                 </li>
 
                 <li class="nav-item m-3" th:if="${@currentUser.isLoggedIn()}">
@@ -41,9 +41,6 @@
                         <a class="dropdown-item" href="/">Други</a>
                     </div>
                 </li>
-                <div class="logged-user nav-item m-3" th:if="${@currentUser.isLoggedIn()}">Добре дошъл, <span
-                        th:text="${@currentUser.getName()}"></span>!
-                </div>
 
 
                 <li class="nav-item m-3" th:if="${@currentUser.isLoggedIn()}">
@@ -59,6 +56,10 @@
                 <li class="nav-item" th:if="${@currentUser.isGuest()}">
                     <a class="nav-link" th:href="@{/users/register}">Регистрация</a>
                 </li>
+
+                <div class="logged-user nav-item m-3" th:if="${@currentUser.isLoggedIn()}">Добре дошъл, <span
+                        th:text="${@currentUser.getName()}"></span>!
+                </div>
 
             </ul>
         </div>

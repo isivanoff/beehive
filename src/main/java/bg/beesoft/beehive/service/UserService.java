@@ -5,6 +5,7 @@ import bg.beesoft.beehive.model.dto.UserRegisterDTO;
 import bg.beesoft.beehive.model.entity.UserEntity;
 import bg.beesoft.beehive.model.user.CurrentUser;
 import bg.beesoft.beehive.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,13 @@ public class UserService {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
     private CurrentUser currentUser;
+    private ModelMapper modelMapper;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CurrentUser currentUser) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CurrentUser currentUser, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.currentUser = currentUser;
+        this.modelMapper = modelMapper;
     }
 
     public boolean login(UserLoginDTO userLoginDTO) {
@@ -53,16 +56,15 @@ public class UserService {
     }
 
     public void registerAndLogin(UserRegisterDTO userRegisterDTO) {
-         UserEntity newUser =
-                new UserEntity().
-                        setActive(true).
-                        setEmail(userRegisterDTO.getEmail()).
-                        setFirstName(userRegisterDTO.getFirstName()).
-                        setLastName(userRegisterDTO.getLastName()).
-                        setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
-
+        userRegisterDTO.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
+        UserEntity newUser = modelMapper.map(userRegisterDTO, UserEntity.class);
+        newUser.setActive(true);
         newUser = userRepository.save(newUser);
 
         login(newUser);
+    }
+
+    public Optional<UserEntity> findByUsernameAndPassword(String email, String password) {
+        return userRepository.findByEmailAndPassword(email,passwordEncoder.encode(password));
     }
 }
