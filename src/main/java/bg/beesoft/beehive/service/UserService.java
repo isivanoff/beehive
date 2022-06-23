@@ -60,6 +60,7 @@ public class UserService {
         UserEntity newUser = modelMapper.map(userRegisterDTO, UserEntity.class);
         newUser.setActive(true);
         newUser = userRepository.save(newUser);
+//TODO: Check if email already exists, check if the passwords match
 
         login(newUser);
     }
