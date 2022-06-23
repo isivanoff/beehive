@@ -1,9 +1,9 @@
 package bg.beesoft.beehive.web;
 
 import bg.beesoft.beehive.model.dto.UserLoginDTO;
-import bg.beesoft.beehive.model.dto.UserRegisterDTO;
 import bg.beesoft.beehive.model.entity.UserEntity;
 import bg.beesoft.beehive.service.UserService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,9 +21,11 @@ import java.util.Optional;
 public class UserController {
 
     private UserService userService;
+    private PasswordEncoder passwordEncoder;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @ModelAttribute("userModel")
@@ -46,16 +48,14 @@ public class UserController {
             return  "redirect:/users/login";
         }
 
-        Optional<UserEntity> optionalUser = userService.findByUsernameAndPassword(userModel.getEmail(),userModel.getPassword());
-        if (optionalUser.isEmpty()){
+        if(userService.login(userModel)){
+            return "redirect:/";
+        }else{
             redirectAttributes.addFlashAttribute("userModel", userModel);
             redirectAttributes.addFlashAttribute("mismatchingData", true);
             return "redirect:/users/login";
-
         }
 
-        userService.login(userModel);
-        return "redirect:/";
     }
 
     @GetMapping("/logout")
