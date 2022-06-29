@@ -12,6 +12,10 @@ public class ApiaryEntity extends BaseEntity{
 
     private int area;
 
+
+    @Column(columnDefinition = "TEXT")
+    private String description;
+
     private String imageUrl;
 
     @OneToOne(cascade = CascadeType.ALL ,optional = false)
@@ -76,4 +80,15 @@ public class ApiaryEntity extends BaseEntity{
         this.beehives = beehives;
         return this;
     }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public ApiaryEntity setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+
 }

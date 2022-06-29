@@ -48,7 +48,10 @@ public class UserService {
     }
 
     private void login(UserEntity userEntity) {
-        currentUser.setLoggedIn(true).setName(userEntity.getFirstName() + " " + userEntity.getLastName());
+        currentUser
+                .setLoggedIn(true)
+                .setName(userEntity.getFirstName() + " " + userEntity.getLastName())
+                .setId(userEntity.getId());
     }
 
     public void logout() {
@@ -66,6 +69,10 @@ public class UserService {
     }
 
     public Optional<UserEntity> findByUsernameAndPassword(String email, String password) {
-        return userRepository.findByEmailAndPassword(email,passwordEncoder.encode(password));
+        return userRepository.findByEmailAndPassword(email, passwordEncoder.encode(password));
+    }
+
+    public UserEntity findById(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 }

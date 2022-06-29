@@ -9,54 +9,64 @@
   <div th:replace="fragments/navbar">Navigation</div>
 </header>
 
-<div class="container-fluid pt-5">
+<div class="container-fluid pt-5 mb-4">
+  <div class="row" style="height: 4em;"></div>
 
-  <form class="row g-3">
+  <h2 class="text-center text-white">Нов пчелин</h2>
+  <form class="main-form mx-auto col-md-8 col-lg-6 d-flex row g-3 justify-content-center"
+        th:action="@{/apiaries/add}"
+        th:method="post"
+        th:object="${apiaryAddDTO}">
+    <small class="bg-danger text-light rounded" th:if="${usedAddress}">Вече има пчелин добавен на този адрес.</small>
     <div class="col-md-6">
-      <label for="inputEmail4" class="form-label">Email</label>
-      <input type="email" class="form-control" id="inputEmail4">
+      <label for="name" class="form-label">Име</label>
+      <input type="text" class="form-control" id="name" th:field="*{name}" th:errorclass="is-invalid">
+      <small class="bg-danger invalid-feedback text-light rounded">Името трябва да съдържа поне 3 символа</small>
+
     </div>
     <div class="col-md-6">
-      <label for="inputPassword4" class="form-label">Password</label>
-      <input type="password" class="form-control" id="inputPassword4">
+      <label for="area" class="form-label">Площ</label>
+      <input type="number" class="form-control" id="area" th:field="*{area}" th:errorclass="is-invalid">
+      <small class="bg-danger invalid-feedback text-light rounded">Невалидна площ.</small>
+
     </div>
     <div class="col-12">
-      <label for="inputAddress" class="form-label">Address</label>
-      <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-    </div>
-    <div class="col-12">
-      <label for="inputAddress2" class="form-label">Address 2</label>
-      <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+      <label for="inputAddress" class="form-label">Адрес</label>
+      <input type="text" class="form-control" id="inputAddress" placeholder="ул.Пчеларска 3" th:field="*{street}" th:errorclass="is-invalid">
+      <small class="bg-danger invalid-feedback text-light rounded">Невалиден адрес</small>
+
     </div>
     <div class="col-md-6">
-      <label for="inputCity" class="form-label">City</label>
-      <input type="text" class="form-control" id="inputCity">
+      <label for="inputCity" class="form-label">Град</label>
+      <input type="text" class="form-control" id="inputCity" th:field="*{city}" th:errorclass="is-invalid">
+      <small class="bg-danger invalid-feedback text-light rounded">Градът трябва да съдържа поне 3 символа.</small>
+
     </div>
     <div class="col-md-4">
-      <label for="inputState" class="form-label">State</label>
-      <select id="inputState" class="form-select">
-        <option selected>Choose...</option>
-        <option>...</option>
-      </select>
+      <label for="inputCountry" class="form-label">Държава</label>
+      <input type="text" class="form-control" id="inputCountry" th:field="*{country}" th:errorclass="is-invalid">
+      <small class="bg-danger invalid-feedback text-light rounded">Държавата трябва да съдържа поне 3 символа.</small>
+
     </div>
     <div class="col-md-2">
-      <label for="inputZip" class="form-label">Zip</label>
-      <input type="text" class="form-control" id="inputZip">
+      <label for="inputZip" class="form-label">ПК</label>
+      <input type="text" class="form-control" id="inputZip" th:field="*{postcode}" th:errorclass="is-invalid">
     </div>
-    <div class="col-12">
-      <div class="form-check">
-        <input class="form-check-input" type="checkbox" id="gridCheck">
-        <label class="form-check-label" for="gridCheck">
-          Check me out
-        </label>
-      </div>
+    <div class="col-12" >
+      <label for="inputAddress2" class="form-label">Допълнително описание</label>
+      <textarea class="form-control" id="inputAddress2" placeholder="Южно разположен, близо до слънчогледовата нива." rows="3" th:field="*{description}" th:errorclass="is-invalid"></textarea>
     </div>
-    <div class="col-12">
-      <button type="submit" class="btn btn-primary">Sign in</button>
-    </div>
-    <div class="mb-3">
-      <label for="formFile" class="form-label">Default file input example</label>
+    <div class="mb-3" style="display:none">
+      <label for="formFile" class="form-label">Снимка на пчелина</label>
       <input class="form-control" type="file" id="formFile">
+    </div>
+    <div class="mb-3" >
+      <label for="inputImg" class="form-label">Снимка на пчелина</label>
+      <input class="form-control" type="text" id="inputImg" th:field="*{imageURL}" th:errorclass="is-invalid">
+    </div>
+
+    <div class="col-12">
+      <button type="submit" class="btn btn-primary">Запази</button>
     </div>
   </form>
 </div>
