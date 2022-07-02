@@ -3,14 +3,13 @@ package bg.beesoft.beehive.web;
 import bg.beesoft.beehive.model.dto.ApiaryAddDTO;
 import bg.beesoft.beehive.model.entity.AddressEntity;
 import bg.beesoft.beehive.model.entity.ApiaryEntity;
-import bg.beesoft.beehive.model.entity.BeehiveEntity;
 import bg.beesoft.beehive.model.entity.UserEntity;
-import bg.beesoft.beehive.model.user.CurrentUser;
 import bg.beesoft.beehive.service.AddressService;
 import bg.beesoft.beehive.service.ApiaryService;
 import bg.beesoft.beehive.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,8 +18,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.security.Principal;
 import java.util.Optional;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/apiaries")
@@ -29,14 +28,12 @@ public class ApiaryController {
     private ApiaryService apiaryService;
     private AddressService addressService;
     private UserService userService;
-    private CurrentUser currentUser;
 
-    public ApiaryController(ModelMapper modelMapper, ApiaryService apiaryService, AddressService addressService, UserService userService, CurrentUser currentUser) {
+    public ApiaryController(ModelMapper modelMapper, ApiaryService apiaryService, AddressService addressService, UserService userService) {
         this.modelMapper = modelMapper;
         this.apiaryService = apiaryService;
         this.addressService = addressService;
         this.userService = userService;
-        this.currentUser = currentUser;
     }
 
     @ModelAttribute("apiaryAddDTO")
@@ -45,7 +42,9 @@ public class ApiaryController {
     }
 
     @GetMapping("/all")
-    public String apiaries() {
+    public String apiaries(Model model,Principal principal) {
+        model.addAttribute("apiaries",apiaryService.findAllApiaries(principal.getName()));
+
         return "apiaries";
     }
 
@@ -57,7 +56,7 @@ public class ApiaryController {
     @PostMapping("/add")
     public String add(@Valid ApiaryAddDTO apiaryAddDTO,
                       BindingResult bindingResult,
-                      RedirectAttributes redirectAttributes) {
+                      RedirectAttributes redirectAttributes, Principal principal) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("apiaryAddDTO", apiaryAddDTO);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.apiaryAddDTO", bindingResult);
@@ -89,7 +88,7 @@ public class ApiaryController {
         apiaryEntity.setAddress(address);
 
 
-        UserEntity userEntity = userService.findById(currentUser.getId());
+        UserEntity userEntity = userService.findByEmail(principal.getName());
         apiaryEntity.setBeekeeper(userEntity);
 
         apiaryService.save(apiaryEntity);

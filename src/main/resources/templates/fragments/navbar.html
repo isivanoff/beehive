@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -10,7 +11,7 @@
 <body>
 <div>
     <nav class="navbar navbar-expand-lg bg-light navbar-light fixed-top px-3">
-        <a class="navbar-brand" href="/"><img alt="beehive logo" src="/img/logo.png" width="120"
+        <a class="navbar-brand" href="/"><img alt="beehive logo" src="/images/logo.png" width="120"
                                               class="d-inline-block align-top"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,19 +20,20 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav nav-pills mr-auto col-12 justify-content-end">
-                <li class="nav-item" th:if="${@currentUser.isLoggedIn()}">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link border border-warning" th:href="@{/apiaries/all}">+ Добави кошер</a>
                 </li>
 
 
-                <li class="nav-item" th:if="${@currentUser.isLoggedIn()}">
+                <li class="nav-item" sec:authorize="isAuthenticated()">
                     <a class="nav-link" th:href="@{/apiaries/all}">Моите пчелини</a>
                 </li>
 
 
-                <li class="nav-item dropdown" th:if="${@currentUser.isLoggedIn()}">
+                <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
 
-                    <button class="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton1"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                         Админ
                     </button>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -42,26 +44,28 @@
                     </div>
                 </li>
 
-                <li class="nav-item dropdown" th:if="${@currentUser.isLoggedIn()}">
-                    <button class="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img src="/img/avatar.png" width="22px"/>
-                        <span th:text="${@currentUser.getName()}"/>
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <button class="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton2"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="/images/avatar.png" width="22px"/>
+                        <span sec:authentication="name"/>
                     </button>
 
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" th:href="@{/users/profile}">Профил</a>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item" th:href="@{/users/logout}">Изход</a>
-                    </div>
+                        <form th:action="@{/users/logout}" th:method="post">
+                            <input class="dropdown-item" type="submit" value="Logout">
+                        </form>                    </div>
                 </li>
 
 
-                <li class="nav-item" th:if="${@currentUser.isGuest()}">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <a class="nav-link" th:href="@{/users/login}">Вход</a>
                 </li>
 
-                <li class="nav-item" th:if="${@currentUser.isGuest()}">
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
                     <a class="nav-link" th:href="@{/users/register}">Регистрация</a>
                 </li>
 

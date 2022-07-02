@@ -4,7 +4,7 @@ public enum TaskEnum {
     FEEDING,
     MEDICATION,
     HARVESTING,
-    QUEENREPLACEMENT,
+    QUEEN_REPLACEMENT,
     EXAMINATION,
     OTHER
 }

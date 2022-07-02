@@ -1,71 +1,115 @@
 package bg.beesoft.beehive.service;
 
-import bg.beesoft.beehive.model.dto.UserLoginDTO;
 import bg.beesoft.beehive.model.dto.UserRegisterDTO;
 import bg.beesoft.beehive.model.entity.UserEntity;
-import bg.beesoft.beehive.model.user.CurrentUser;
+import bg.beesoft.beehive.model.entity.UserRoleEntity;
+import bg.beesoft.beehive.model.entity.enums.UserRoleEnum;
 import bg.beesoft.beehive.repository.UserRepository;
+import bg.beesoft.beehive.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
 
+    private final UserDetailsService appUserDetailsService;
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
-    private CurrentUser currentUser;
-    private ModelMapper modelMapper;
+    private String adminPass;
+    private UserRoleRepository userRoleRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CurrentUser currentUser, ModelMapper modelMapper) {
+    public UserService(UserRepository userRepository,
+                       UserRoleRepository userRoleRepository,
+                       PasswordEncoder passwordEncoder,
+                       UserDetailsService appUserDetailsService,
+                       @Value("${app.default.admin.password}") String adminPass) {
         this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
-        this.currentUser = currentUser;
-        this.modelMapper = modelMapper;
+        this.appUserDetailsService = appUserDetailsService;
+        this.adminPass = adminPass;
     }
 
-    public boolean login(UserLoginDTO userLoginDTO) {
-        Optional<UserEntity> userOpt = userRepository.findByEmail(userLoginDTO.getEmail());
+    public void init() {
+        if (userRepository.count() == 0 && userRoleRepository.count() == 0) {
+            UserRoleEntity adminRole = new UserRoleEntity().setUserRole(UserRoleEnum.ADMIN);
+            UserRoleEntity moderatorRole = new UserRoleEntity().setUserRole(UserRoleEnum.MODERATOR);
 
-        if (userOpt.isEmpty() || !userOpt.get().isActive()) {
-            return false;
+            adminRole = userRoleRepository.save(adminRole);
+            moderatorRole = userRoleRepository.save(moderatorRole);
+
+            initAdmin(List.of(adminRole, moderatorRole));
+            initModerator(List.of(moderatorRole));
+            initUser(List.of());
         }
-
-        String enteredPassword = userLoginDTO.getPassword();
-        String actualPassword = userOpt.get().getPassword();
-
-        boolean correctPassword = passwordEncoder.matches(enteredPassword, actualPassword);
-
-        if (correctPassword) {
-            login(userOpt.get());
-        } else {
-            logout();
-        }
-
-        return correctPassword;
     }
 
-    private void login(UserEntity userEntity) {
-        currentUser
-                .setLoggedIn(true)
-                .setName(userEntity.getFirstName() + " " + userEntity.getLastName())
-                .setId(userEntity.getId());
+    private void initAdmin(List<UserRoleEntity> roles) {
+        UserEntity admin = new UserEntity().
+                setUserRoles(roles).
+                setFirstName("Admin").
+                setLastName("Adminov").
+                setEmail("admin@example.com").
+                setPassword(passwordEncoder.encode(adminPass));
+
+        userRepository.save(admin);
     }
 
-    public void logout() {
-        currentUser.clear();
+    private void initModerator(List<UserRoleEntity> roles) {
+        UserEntity moderator = new UserEntity().
+                setUserRoles(roles).
+                setFirstName("Moderator").
+                setLastName("Moderatorov").
+                setEmail("moderator@example.com").
+                setPassword(passwordEncoder.encode(adminPass));
+
+        userRepository.save(moderator);
+    }
+
+    private void initUser(List<UserRoleEntity> roles) {
+        UserEntity user = new UserEntity().
+                setUserRoles(roles).
+                setFirstName("User").
+                setLastName("Userov").
+                setEmail("user@example.com").
+                setPassword(passwordEncoder.encode(adminPass));
+
+        userRepository.save(user);
     }
 
     public void registerAndLogin(UserRegisterDTO userRegisterDTO) {
-        userRegisterDTO.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
-        UserEntity newUser = modelMapper.map(userRegisterDTO, UserEntity.class);
-        newUser.setActive(true);
-        newUser = userRepository.save(newUser);
-//TODO: Check if email already exists, check if the passwords match
+        UserEntity newUser =
+                new UserEntity().
+                        setEmail(userRegisterDTO.getEmail()).
+                        setFirstName(userRegisterDTO.getFirstName()).
+                        setLastName(userRegisterDTO.getLastName()).
+                        setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
 
-        login(newUser);
+        userRepository.save(newUser);
+
+        UserDetails userDetails =
+                appUserDetailsService.loadUserByUsername(newUser.getEmail());
+
+        Authentication auth =
+                new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        userDetails.getPassword(),
+                        userDetails.getAuthorities()
+                );
+
+        SecurityContextHolder.
+                getContext().
+                setAuthentication(auth);
     }
 
     public Optional<UserEntity> findByUsernameAndPassword(String email, String password) {
@@ -74,5 +118,9 @@ public class UserService {
 
     public UserEntity findById(Long id) {
         return userRepository.findById(id).orElse(null);
+    }
+
+    public UserEntity findByEmail(String name) {
+        return userRepository.findByEmail(name).orElse(null);
     }
 }
