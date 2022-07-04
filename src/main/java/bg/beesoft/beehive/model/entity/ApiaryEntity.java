@@ -18,7 +18,7 @@ public class ApiaryEntity extends BaseEntity{
 
     private String imageUrl;
 
-    @OneToOne(cascade = CascadeType.ALL ,optional = false)
+    @OneToOne(cascade = CascadeType.ALL ,optional = false,fetch = FetchType.LAZY, orphanRemoval = true)
     private AddressEntity address;
 
     @ManyToOne(optional = false)

@@ -7,6 +7,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "addresses")
 public class AddressEntity extends BaseEntity {
+
+
     @Column(nullable = false)
     private String country;
 
