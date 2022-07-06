@@ -48,7 +48,7 @@
                     <button class="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton2"
                             data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="/images/avatar.png" width="22px"/>
-                        <span sec:authentication="name"/>
+                        <th:block th:text="${#authentication.principal.fullName}">X</th:block>
                     </button>
 
 

@@ -18,8 +18,8 @@ public class RegistrationController {
     private final UserService userService;
 
     @ModelAttribute("userModel")
-    public void initUserModel(Model model){
-        model.addAttribute("userModel",new UserRegisterDTO());
+    public UserRegisterDTO initUserModel(){
+        return new UserRegisterDTO();
     }
 
     public RegistrationController(UserService userService) {
@@ -32,21 +32,21 @@ public class RegistrationController {
     }
 
     @PostMapping("/users/register")
-    public String register(@Valid UserRegisterDTO userRegisterDTO,
+    public String register(@Valid UserRegisterDTO userModel,
                            BindingResult bindingResult,
                            RedirectAttributes redirectAttributes) {
-        boolean passwordsDoNotMatch = !userRegisterDTO.getPassword().equals(userRegisterDTO.getConfirmPassword());
+        boolean passwordsDoNotMatch = !userModel.getPassword().equals(userModel.getConfirmPassword());
 
         if (bindingResult.hasErrors() || passwordsDoNotMatch) {
             if(passwordsDoNotMatch){
                 redirectAttributes.addFlashAttribute("passwordsDoNotMatch",true);
             }
-            redirectAttributes.addFlashAttribute("userModel", userRegisterDTO);
+            redirectAttributes.addFlashAttribute("userModel", userModel);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userModel", bindingResult);
             return "redirect:/users/register";
         }
 
-        userService.registerAndLogin(userRegisterDTO);
+        userService.registerAndLogin(userModel);
         return "redirect:/";
     }
 }

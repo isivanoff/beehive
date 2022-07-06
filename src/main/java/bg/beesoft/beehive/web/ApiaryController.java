@@ -3,12 +3,11 @@ package bg.beesoft.beehive.web;
 import bg.beesoft.beehive.model.dto.ApiaryAddDTO;
 import bg.beesoft.beehive.model.dto.ApiaryEditDTO;
 import bg.beesoft.beehive.model.entity.AddressEntity;
-import bg.beesoft.beehive.model.entity.ApiaryEntity;
-import bg.beesoft.beehive.model.entity.UserEntity;
 import bg.beesoft.beehive.service.AddressService;
 import bg.beesoft.beehive.service.ApiaryService;
 import bg.beesoft.beehive.service.UserService;
-import org.modelmapper.ModelMapper;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,13 +21,11 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/apiaries")
 public class ApiaryController {
-    private ModelMapper modelMapper;
     private ApiaryService apiaryService;
     private AddressService addressService;
     private UserService userService;
 
-    public ApiaryController(ModelMapper modelMapper, ApiaryService apiaryService, AddressService addressService, UserService userService) {
-        this.modelMapper = modelMapper;
+    public ApiaryController(ApiaryService apiaryService, AddressService addressService, UserService userService) {
         this.apiaryService = apiaryService;
         this.addressService = addressService;
         this.userService = userService;
@@ -55,18 +52,13 @@ public class ApiaryController {
     @PostMapping("/add")
     public String add(@Valid ApiaryAddDTO apiaryAddDTO,
                       BindingResult bindingResult,
-                      RedirectAttributes redirectAttributes, Principal principal) {
+                      RedirectAttributes redirectAttributes,
+                      @AuthenticationPrincipal UserDetails userDetails) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("apiaryAddDTO", apiaryAddDTO);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.apiaryAddDTO", bindingResult);
             return "redirect:/apiaries/add";
         }
-
-        ApiaryEntity apiaryEntity = new ApiaryEntity().
-                setName(apiaryAddDTO.getName())
-                .setDescription(apiaryAddDTO.getDescription())
-                .setArea(apiaryAddDTO.getArea())
-                .setImageUrl(apiaryAddDTO.getImageURL());
 
         Optional<AddressEntity> optionalAddress = addressService.findByCityAndCountryAndStreet(apiaryAddDTO.getCity(), apiaryAddDTO.getCountry(), apiaryAddDTO.getStreet());
 
@@ -77,29 +69,17 @@ public class ApiaryController {
             return "redirect:/apiaries/add";
 
         }
-        AddressEntity address = new AddressEntity().
-                setCity(apiaryAddDTO.getCity()).
-                setCountry(apiaryAddDTO.getCountry()).
-                setPostcode(apiaryAddDTO.getPostcode()).
-                setStreet(apiaryAddDTO.getStreet());
 
-        addressService.add(address);
-        apiaryEntity.setAddress(address);
-
-
-        UserEntity userEntity = userService.findByEmail(principal.getName());
-        apiaryEntity.setBeekeeper(userEntity);
-
-        apiaryService.save(apiaryEntity);
+        apiaryService.save(apiaryAddDTO,userDetails);
         return "redirect:/apiaries/all";
 
     }
 
 
     @GetMapping("/edit/{id}")
-    public String edit(Model model,@PathVariable Long id, RedirectAttributes redirectAttributes) {
-            ApiaryEditDTO apiaryEditDTO = apiaryService.findById(id);
-            model.addAttribute("apiaryEditDTO", apiaryEditDTO);
+    public String edit(Model model, @PathVariable Long id, RedirectAttributes redirectAttributes) {
+        ApiaryEditDTO apiaryEditDTO = apiaryService.findById(id);
+        model.addAttribute("apiaryEditDTO", apiaryEditDTO);
         return "apiary-edit";
     }
 
@@ -109,7 +89,7 @@ public class ApiaryController {
     }
 
 
-    @PostMapping("/edit/{id}")
+    @PutMapping("/edit/{id}")
     public String edit(@Valid ApiaryEditDTO apiaryEditDTO,
                        BindingResult bindingResult,
                        RedirectAttributes redirectAttributes) {
@@ -128,7 +108,7 @@ public class ApiaryController {
             return "redirect:/apiaries/edit/{id}/error";
 
         }
-        apiaryService.update(apiaryEditDTO,optionalAddress);
+        apiaryService.update(apiaryEditDTO, optionalAddress);
 
 
         return "redirect:/apiaries/all";

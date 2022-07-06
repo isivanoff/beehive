@@ -112,14 +112,6 @@ public class UserService {
                 setAuthentication(auth);
     }
 
-    public Optional<UserEntity> findByUsernameAndPassword(String email, String password) {
-        return userRepository.findByEmailAndPassword(email, passwordEncoder.encode(password));
-    }
-
-    public UserEntity findById(Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
     public UserEntity findByEmail(String name) {
         return userRepository.findByEmail(name).orElse(null);
     }

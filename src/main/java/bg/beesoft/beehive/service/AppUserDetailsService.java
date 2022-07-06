@@ -2,10 +2,10 @@ package bg.beesoft.beehive.service;
 
 import bg.beesoft.beehive.model.entity.UserEntity;
 import bg.beesoft.beehive.model.entity.UserRoleEntity;
+import bg.beesoft.beehive.model.user.BeehiveUserDetails;
 import bg.beesoft.beehive.repository.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -28,16 +28,17 @@ public class AppUserDetailsService implements UserDetailsService {
     }
 
     private UserDetails map(UserEntity userEntity) {
-        return
-                User.builder().
-                        username(userEntity.getEmail()).
-                        password(userEntity.getPassword()).
-                        authorities(userEntity.
-                                getUserRoles().
-                                stream().
-                                map(this::map).
-                                toList()).
-                        build();
+        return new BeehiveUserDetails(
+                userEntity.getPassword(),
+                userEntity.getEmail(),
+                userEntity.getFirstName(),
+                userEntity.getLastName(),
+                userEntity.
+                        getUserRoles().
+                        stream().
+                        map(this::map).
+                        toList()
+        );
     }
 
     private GrantedAuthority map(UserRoleEntity userRole) {
