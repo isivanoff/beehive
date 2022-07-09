@@ -40,7 +40,6 @@ public class ApiaryController {
     @GetMapping("/all")
     public String apiaries(Model model, Principal principal) {
         model.addAttribute("apiaries", apiaryService.findAllApiaries(principal.getName()));
-
         return "apiaries";
     }
 
@@ -70,14 +69,14 @@ public class ApiaryController {
 
         }
 
-        apiaryService.save(apiaryAddDTO,userDetails);
+        apiaryService.save(apiaryAddDTO, userDetails);
         return "redirect:/apiaries/all";
 
     }
 
 
     @GetMapping("/edit/{id}")
-    public String edit(Model model, @PathVariable Long id, RedirectAttributes redirectAttributes) {
+    public String edit(Model model, @PathVariable Long id) {
         ApiaryEditDTO apiaryEditDTO = apiaryService.findById(id);
         model.addAttribute("apiaryEditDTO", apiaryEditDTO);
         return "apiary-edit";
@@ -108,6 +107,7 @@ public class ApiaryController {
             return "redirect:/apiaries/edit/{id}/error";
 
         }
+
         apiaryService.update(apiaryEditDTO, optionalAddress);
 
 

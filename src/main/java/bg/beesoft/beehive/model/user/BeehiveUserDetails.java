@@ -74,4 +74,7 @@ public class BeehiveUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+
+
 }

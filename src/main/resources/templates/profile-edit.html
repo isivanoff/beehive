@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="fragments/head">Head</div>
+</head>
+<body class="d-flex flex-column h-100">
+
+<header>
+  <div th:replace="fragments/navbar">Navigation</div>
+</header>
+
+<div class="container-fluid pt-5 mb-4">
+  <div class="row" style="height: 4em;"></div>
+
+  <h2 class="text-center text-white">Обновяване на профила</h2>
+  <form class="main-form mx-auto col-md-8 col-lg-6 d-flex row g-3 justify-content-center"
+        th:action="@{/users/profile/edit}"
+        th:method="put"
+        th:object="${userEditDTO}">
+    <div class="col-md-6">
+      <label for="firstName" class="form-label">Име</label>
+      <input type="text" class="form-control" id="firstName" th:field="*{firstName}" th:errorclass="is-invalid">
+      <small class="bg-danger invalid-feedback text-light rounded">Името трябва да съдържа поне 2 символа</small>
+    </div>
+    <div class="col-md-6">
+      <label for="lastName" class="form-label">Фамилия</label>
+      <input type="text" class="form-control" id="lastName" th:field="*{lastName}" th:errorclass="is-invalid">
+      <small class="bg-danger invalid-feedback text-light rounded">Името трябва да съдържа поне 2 символа</small>
+    </div>
+
+    <div class="mb-3" style="display:none">
+      <label for="formFile" class="form-label">Профилна снимка</label>
+      <input class="form-control" type="file" id="formFile">
+    </div>
+    <div class="mb-3" >
+      <label for="inputImg" class="form-label">Профилна снимка</label>
+      <input class="form-control" type="text" id="inputImg" th:field="*{imageUrl}" th:errorclass="is-invalid">
+
+    </div>
+
+      <button type="submit" class="btn btn-primary">Запази</button>
+
+
+  </form>
+</div>
+
+</div>
+
+<div th:replace="fragments/footer">Footer</div>
+
+</body>
+</html>

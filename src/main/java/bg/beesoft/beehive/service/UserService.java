@@ -1,5 +1,6 @@
 package bg.beesoft.beehive.service;
 
+import bg.beesoft.beehive.model.dto.UserEditDTO;
 import bg.beesoft.beehive.model.dto.UserRegisterDTO;
 import bg.beesoft.beehive.model.entity.UserEntity;
 import bg.beesoft.beehive.model.entity.UserRoleEntity;
@@ -8,6 +9,7 @@ import bg.beesoft.beehive.repository.UserRepository;
 import bg.beesoft.beehive.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,6 +18,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolationException;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,17 +32,19 @@ public class UserService {
     private PasswordEncoder passwordEncoder;
     private String adminPass;
     private UserRoleRepository userRoleRepository;
+    private ModelMapper modelMapper;
 
     public UserService(UserRepository userRepository,
                        UserRoleRepository userRoleRepository,
                        PasswordEncoder passwordEncoder,
                        UserDetailsService appUserDetailsService,
-                       @Value("${app.default.admin.password}") String adminPass) {
+                       @Value("${app.default.admin.password}") String adminPass, ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.appUserDetailsService = appUserDetailsService;
         this.adminPass = adminPass;
+        this.modelMapper = modelMapper;
     }
 
     public void init() {
@@ -95,8 +102,12 @@ public class UserService {
                         setLastName(userRegisterDTO.getLastName()).
                         setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
 
-        userRepository.save(newUser);
+            userRepository.save(newUser);
 
+        updateAuthentication(newUser);
+    }
+
+    private void updateAuthentication(UserEntity newUser) {
         UserDetails userDetails =
                 appUserDetailsService.loadUserByUsername(newUser.getEmail());
 
@@ -112,7 +123,32 @@ public class UserService {
                 setAuthentication(auth);
     }
 
-    public UserEntity findByEmail(String name) {
-        return userRepository.findByEmail(name).orElse(null);
+    public Optional<UserEntity> findByEmail(String name) {
+        return userRepository.findByEmail(name);
+    }
+
+    public UserEditDTO getEditDetails(String username) {
+        return modelMapper.map(userRepository.findByEmail(username).orElse(null), UserEditDTO.class);
+    }
+
+    public void update(UserEditDTO userEditDTO) {
+
+        UserEntity newUser = userRepository.findByEmail(userEditDTO.getEmail()).orElse(null)
+                .setFirstName(userEditDTO.getFirstName())
+                .setLastName(userEditDTO.getLastName())
+                .setImageUrl(userEditDTO.getImageUrl());
+        userRepository.save(newUser);
+        updateAuthentication(newUser);
+    }
+
+    public void deleteByEmail(String username) {
+        userRepository.deleteByEmail(username);
+        SecurityContextHolder.clearContext();
+    }
+
+    public void updatePassword(String email,String newPassword) {
+        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow();
+        userEntity.setPassword(passwordEncoder.encode(newPassword));
+        updateAuthentication(userEntity);
     }
 }

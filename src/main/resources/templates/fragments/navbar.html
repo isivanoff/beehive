@@ -32,10 +32,10 @@
 
                 <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
 
-                    <button class="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    <a class="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton1"
                             data-bs-toggle="dropdown" aria-expanded="false">
                         Админ
-                    </button>
+                    </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <a class="dropdown-item" href="/">Действие 1</a>
                         <a class="dropdown-item" href="/">Действие 2</a>
@@ -45,11 +45,11 @@
                 </li>
 
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
-                    <button class="btn btn-white dropdown-toggle" type="button" id="dropdownMenuButton2"
+                    <a class="btn btn-warning dropdown-toggle" type="button" id="dropdownMenuButton2"
                             data-bs-toggle="dropdown" aria-expanded="false">
                         <img src="/images/avatar.png" width="22px"/>
                         <th:block th:text="${#authentication.principal.fullName}">X</th:block>
-                    </button>
+                    </a>
 
 
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">

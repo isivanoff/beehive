@@ -46,7 +46,7 @@ public class ApiaryService {
         apiaryEntity.setAddress(address);
 
 
-        UserEntity userEntity = userService.findByEmail(userDetails.getUsername());
+        UserEntity userEntity = userService.findByEmail(userDetails.getUsername()).get();
         apiaryEntity.setBeekeeper(userEntity);
 
         apiaryRepository.save(apiaryEntity);
@@ -67,9 +67,7 @@ public class ApiaryService {
                 .setArea(apiaryEditDTO.getArea())
                 .setImageUrl(apiaryEditDTO.getImageURL());
 
-        AddressEntity address;
-
-        address = optionalAddress.orElseGet(AddressEntity::new);
+        AddressEntity address = optionalAddress.orElseGet(AddressEntity::new);
         addressService.deleteById(apiaryEntity.getAddress().getId());
 
         address.
