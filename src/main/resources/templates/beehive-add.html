@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <div th:replace="fragments/head">Head</div>
+</head>
+<body class="d-flex flex-column h-100">
+
+<header>
+  <div th:replace="fragments/navbar">Navigation</div>
+</header>
+
+<div class="container-fluid pt-5 mb-4">
+  <div class="row" style="height: 4em;"></div>
+
+  <h2 class="text-center text-white">Добави кошер</h2>
+  <form class="main-form mx-auto col-md-8 col-lg-6 d-flex row g-3 justify-content-center"
+        th:action="@{/beehives/add}"
+        th:method="post"
+        th:object="${beehiveAddDTO}">
+
+    <div class="form-group">
+      <label for="referenceNumber">Референтен номер</label>
+      <input type="email" class="form-control" id="referenceNumber" aria-describedby="emailHelp" placeholder="Референтен номер">
+      <small id="emailHelp" class="form-text text-muted">Уникален номер в пчелина.</small>
+    </div>
+
+    <div class="form-group">
+      <label class="text-center text-white font-weight-bold" for="type">Тип кошер</label>
+      <select id="type"
+              name="type"
+              th:errorclass="is-invalid"
+              class="form-control">
+        <option value="">- Избери тип кошер -</option>
+        <option th:each="e : ${T(bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum).values()}"
+                th:text="${e}"
+                th:value="${e}"
+                th:selected="${e} == *{type}">
+          Transmission type
+        </option>
+      </select>
+      <p class="invalid-feedback errors alert alert-danger">
+        Задължително поле.
+      </p>
+
+    </div>
+
+    <div class="form-group">
+      <label for="exampleInputPassword1">Password</label>
+      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+    </div>
+
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" id="exampleCheck1">
+      <label class="form-check-label" for="exampleCheck1">Check me out</label>
+    </div>
+
+
+      <button type="submit" class="btn btn-primary">Добави</button>
+
+  </form>
+</div>
+
+<div th:replace="fragments/footer">Footer</div>
+
+</body>
+</html>
