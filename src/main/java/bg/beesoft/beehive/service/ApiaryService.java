@@ -2,10 +2,8 @@ package bg.beesoft.beehive.service;
 
 import bg.beesoft.beehive.model.dto.ApiaryAddDTO;
 import bg.beesoft.beehive.model.dto.ApiaryEditDTO;
-import bg.beesoft.beehive.model.entity.AddressEntity;
-import bg.beesoft.beehive.model.entity.ApiaryEntity;
-import bg.beesoft.beehive.model.entity.UserEntity;
-import bg.beesoft.beehive.model.user.BeehiveUserDetails;
+import bg.beesoft.beehive.model.entity.*;
+import bg.beesoft.beehive.model.view.ApiaryView;
 import bg.beesoft.beehive.repository.ApiaryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ApiaryService {
@@ -46,7 +45,7 @@ public class ApiaryService {
         apiaryEntity.setAddress(address);
 
 
-        UserEntity userEntity = userService.findByEmail(userDetails.getUsername()).get();
+        UserEntity userEntity = userService.findByEmail(userDetails.getUsername());
         apiaryEntity.setBeekeeper(userEntity);
 
         apiaryRepository.save(apiaryEntity);
@@ -88,5 +87,34 @@ public class ApiaryService {
 
     public void deleteById(Long id) {
         apiaryRepository.deleteById(id);
+    }
+
+    public List<ApiaryView> viewAllByBeekeperEmail(String username) {
+        return apiaryRepository.findByBeekeeperEmail(username)
+                .stream()
+                .map(a -> new ApiaryView().setId(a.getId()).setName(a.getName() + " - " + a.getAddress().getCity()))
+                .collect(Collectors.toList());
+    }
+
+    public boolean apiaryAlreadyHasBeehiveNumber(Long apiaryId, int referenceNumber) {
+        return apiaryRepository.findById(apiaryId).
+                orElseThrow().
+                getBeehives().
+                stream().
+                map(BeehiveEntity::getReferenceNumber).
+                collect(Collectors.toList()).
+                contains(referenceNumber);
+    }
+
+    public ApiaryEntity getById(Long apiaryId) {
+        return apiaryRepository.findById(apiaryId).orElseThrow();
+    }
+
+    public void saveApiary(ApiaryEntity apiaryEntity) {
+        apiaryRepository.save(apiaryEntity);
+    }
+
+    public ApiaryView findViewById(Long id) {
+        return modelMapper.map(findById(id),ApiaryView.class);
     }
 }

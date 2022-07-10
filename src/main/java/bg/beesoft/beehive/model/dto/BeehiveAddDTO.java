@@ -2,10 +2,12 @@ package bg.beesoft.beehive.model.dto;
 
 import bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum;
 import bg.beesoft.beehive.model.entity.enums.ColorEnum;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 
@@ -23,7 +25,7 @@ public class BeehiveAddDTO {
     private ColorEnum color;
 
     @NotNull
-    private boolean isAlive;
+    private boolean alive;
 
     private String imageUrl;
 
@@ -33,6 +35,8 @@ public class BeehiveAddDTO {
     @NotNull
     private boolean queenIsMarked;
 
+    @PastOrPresent
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfMark;
 
     @NotNull
@@ -73,11 +77,11 @@ public class BeehiveAddDTO {
     }
 
     public boolean isAlive() {
-        return isAlive;
+        return alive;
     }
 
     public BeehiveAddDTO setAlive(boolean alive) {
-        isAlive = alive;
+        this.alive = alive;
         return this;
     }
 

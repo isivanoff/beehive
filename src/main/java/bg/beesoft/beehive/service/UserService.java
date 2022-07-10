@@ -123,8 +123,8 @@ public class UserService {
                 setAuthentication(auth);
     }
 
-    public Optional<UserEntity> findByEmail(String name) {
-        return userRepository.findByEmail(name);
+    public UserEntity findByEmail(String name) {
+        return userRepository.findByEmail(name).orElseThrow();
     }
 
     public UserEditDTO getEditDetails(String username) {
@@ -150,5 +150,9 @@ public class UserService {
         UserEntity userEntity = userRepository.findByEmail(email).orElseThrow();
         userEntity.setPassword(passwordEncoder.encode(newPassword));
         updateAuthentication(userEntity);
+    }
+
+    public boolean emailIsTaken(String email) {
+        return userRepository.findByEmail(email).isPresent();
     }
 }

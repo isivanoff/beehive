@@ -1,63 +1,132 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <div th:replace="fragments/head">Head</div>
+    <div th:replace="fragments/head">Head</div>
 </head>
 <body class="d-flex flex-column h-100">
 
 <header>
-  <div th:replace="fragments/navbar">Navigation</div>
+    <div th:replace="fragments/navbar">Navigation</div>
 </header>
 
 <div class="container-fluid pt-5 mb-4">
-  <div class="row" style="height: 4em;"></div>
+    <div class="row" style="height: 4em;"></div>
 
-  <h2 class="text-center text-white">Добави кошер</h2>
-  <form class="main-form mx-auto col-md-8 col-lg-6 d-flex row g-3 justify-content-center"
-        th:action="@{/beehives/add}"
-        th:method="post"
-        th:object="${beehiveAddDTO}">
-
-    <div class="form-group">
-      <label for="referenceNumber">Референтен номер</label>
-      <input type="email" class="form-control" id="referenceNumber" aria-describedby="emailHelp" placeholder="Референтен номер">
-      <small id="emailHelp" class="form-text text-muted">Уникален номер в пчелина.</small>
-    </div>
-
-    <div class="form-group">
-      <label class="text-center text-white font-weight-bold" for="type">Тип кошер</label>
-      <select id="type"
-              name="type"
-              th:errorclass="is-invalid"
-              class="form-control">
-        <option value="">- Избери тип кошер -</option>
-        <option th:each="e : ${T(bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum).values()}"
-                th:text="${e}"
-                th:value="${e}"
-                th:selected="${e} == *{type}">
-          Transmission type
-        </option>
-      </select>
-      <p class="invalid-feedback errors alert alert-danger">
-        Задължително поле.
-      </p>
-
-    </div>
-
-    <div class="form-group">
-      <label for="exampleInputPassword1">Password</label>
-      <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-    </div>
-
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="exampleCheck1">
-      <label class="form-check-label" for="exampleCheck1">Check me out</label>
-    </div>
+    <h2 class="text-center text-white">Добави кошер</h2>
+    <form class="main-form mx-auto col-md-8 col-lg-6 d-flex row g-3 justify-content-center"
+          th:action="@{/beehives/add}+${hasApiary ? '?apiary=' + apiary : ''}"
+          th:method="post"
+          th:object="${beehiveAddDTO}">
 
 
-      <button type="submit" class="btn btn-primary">Добави</button>
+        <div class="form-group" th:if="${!hasApiary}">
+            <label class="text-center text-white font-weight-bold" for="apiaryId">Пчелин</label>
+            <select id="apiaryId"
+                    name="apiaryId"
+                    th:errorclass="is-invalid"
+                    class="form-select">
+                <option value="">- Пчелин -</option>
+                <option th:each="e : ${apiaries}"
+                        th:text="${e.name}"
+                        th:value="${e.id}"
+                        th:selected="${e.id} == *{apiaryId}">
+                    Тип кошер.
+                </option>
+            </select>
+            <p class="invalid-feedback errors alert alert-danger">
+                Задължително поле.
+            </p>
+        </div>
 
-  </form>
+        <div class="form-group">
+            <label class="text-center text-white font-weight-bold" for="referenceNumber">Референтен номер</label>
+            <p th:if="${numberIsTaken}" class="errors alert alert-danger">
+                Вече има кошер с този номер в пчелина, моля проверете.
+            </p>
+            <input type="number" class="form-control" th:field="*{referenceNumber}" id="referenceNumber"
+                   th:errorclass="is-invalid"
+                   th:placeholder="'Референтен номер'">
+            <p class="invalid-feedback errors alert alert-danger">
+                Номерът на кошера трябва да е положително число.
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label class="text-center text-white font-weight-bold" for="type">Тип кошер</label>
+            <select id="type"
+                    name="type"
+                    th:errorclass="is-invalid"
+                    class="form-select">
+                <option value="">- Избери тип кошер -</option>
+                <option th:each="e : ${T(bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum).values()}"
+                        th:text="${e}"
+                        th:value="${e}"
+                        th:selected="${e} == *{type}">
+                    Тип кошер.
+                </option>
+            </select>
+            <p class="invalid-feedback errors alert alert-danger">
+                Задължително поле.
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label class="text-center text-white font-weight-bold" for="color">Цвят</label>
+            <select id="color"
+                    name="color"
+                    th:errorclass="is-invalid"
+                    class="form-select">
+                <option value="">- Избери цвят -</option>
+                <option th:each="e : ${T(bg.beesoft.beehive.model.entity.enums.ColorEnum).values()}"
+                        th:text="${e}"
+                        th:value="${e}"
+                        th:selected="${e} == *{color}">
+                    Цвят
+                </option>
+            </select>
+            <p class="invalid-feedback errors alert alert-danger">
+                Задължително поле.
+            </p>
+        </div>
+
+        <div class="form-group">
+            <label for="inputImg" class="text-center text-white font-weight-bold">Снимка на Кошера</label>
+            <input class="form-control" type="text" id="inputImg" th:field="*{imageUrl}" th:errorclass="is-invalid">
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input"  th:checked="*{alive}" name="alive" id="alive">
+            <label class="form-check-label" for="alive">Кошерът е жив</label>
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" th:checked="*{queenIsAlive}" name="queenIsAlive" id="queenIsAlive">
+            <label class="form-check-label" for="queenIsAlive">Жива майка</label>
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" th:checked="*{queenIsActive}" name="queenIsActive" id="queenIsActive">
+            <label class="form-check-label" for="queenIsActive">Пронесла майка</label>
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" th:checked="*{queenIsMarked}" name="queenIsMarked" id="queenIsMarked">
+            <label class="form-check-label" for="queenIsMarked">Маркирана майка</label>
+        </div>
+
+        <div class="form-group">
+            <label for="dateOfMark" class="text-center text-white font-weight-bold">Дата на маркиране:</label>
+            <input type="date" class="form-control" th:field="*{dateOfMark}"  id="dateOfMark"
+                   th:errorclass="is-invalid"/>
+            <p class="invalid-feedback errors alert alert-danger">
+                Датата трябва да е във формат dd-MM-yyyy и да е днес или преди това.
+            </p>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Добави</button>
+
+    </form>
 </div>
 
 <div th:replace="fragments/footer">Footer</div>

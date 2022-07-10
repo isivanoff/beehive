@@ -3,8 +3,11 @@ package bg.beesoft.beehive.web;
 import bg.beesoft.beehive.model.dto.ApiaryAddDTO;
 import bg.beesoft.beehive.model.dto.ApiaryEditDTO;
 import bg.beesoft.beehive.model.entity.AddressEntity;
+import bg.beesoft.beehive.model.view.ApiaryView;
+import bg.beesoft.beehive.model.view.BeehiveView;
 import bg.beesoft.beehive.service.AddressService;
 import bg.beesoft.beehive.service.ApiaryService;
+import bg.beesoft.beehive.service.BeehiveService;
 import bg.beesoft.beehive.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -24,11 +28,13 @@ public class ApiaryController {
     private ApiaryService apiaryService;
     private AddressService addressService;
     private UserService userService;
+    private BeehiveService beehiveService;
 
-    public ApiaryController(ApiaryService apiaryService, AddressService addressService, UserService userService) {
+    public ApiaryController(ApiaryService apiaryService, AddressService addressService, UserService userService, BeehiveService beehiveService) {
         this.apiaryService = apiaryService;
         this.addressService = addressService;
         this.userService = userService;
+        this.beehiveService = beehiveService;
     }
 
     @ModelAttribute("apiaryAddDTO")
@@ -119,5 +125,18 @@ public class ApiaryController {
         apiaryService.deleteById(id);
         return "redirect:/apiaries/all";
     }
+
+
+    @GetMapping("/view/{id}")
+    public String view(Model model, @PathVariable Long id) {
+        ApiaryView apiary = apiaryService.findViewById(id);
+        List<BeehiveView> beehives = beehiveService.findViewAllByApiaryId(id);
+
+        model.addAttribute("apiary", apiary);
+        model.addAttribute("beehives", beehives);
+
+        return "beehives";
+    }
+
 
 }
