@@ -34,14 +34,14 @@ public class BeehiveController {
     }
 
     @GetMapping("/add")
-    public String add(Model model, @AuthenticationPrincipal UserDetails userDetails, @RequestParam Optional<Long> apiary) {
+    public String add(Model model, @AuthenticationPrincipal UserDetails userDetails, @RequestParam Optional<Long> apiary, BeehiveAddDTO beehiveAddDTO) {
         boolean hasApiary = apiary.isPresent();
 
         List<ApiaryView> apiaries = apiaryService.viewAllByBeekeperEmail(userDetails.getUsername());
         model.addAttribute("apiaries", apiaries);
         model.addAttribute("hasApiary", hasApiary);
         if (hasApiary) {
-            model.addAttribute("apiary", apiary.get());
+            beehiveAddDTO.setApiaryId(apiary.get());
         }
         return "beehive-add";
     }
@@ -58,14 +58,12 @@ public class BeehiveController {
 
         boolean hasApiary = apiary.isPresent();
 
-        apiary.ifPresent(beehiveAddDTO::setApiaryId);
-
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("beehiveAddDTO", beehiveAddDTO);
             redirectAttributes.addFlashAttribute("apiaries", apiaries);
             redirectAttributes.addFlashAttribute("hasApiary", hasApiary);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.beehiveAddDTO", bindingResult);
-            return "redirect:/beehives/add?apiary=" + (apiary.isPresent() ? apiary.get().toString() : "");
+            return "redirect:/beehives/add" + (apiary.isPresent() ? "?apiary=" + beehiveAddDTO.getApiaryId().toString() : "");
         }
 
         boolean numberIsTaken = apiaryService.apiaryAlreadyHasBeehiveNumber(beehiveAddDTO.getApiaryId(), beehiveAddDTO.getReferenceNumber());
@@ -76,7 +74,7 @@ public class BeehiveController {
             redirectAttributes.addFlashAttribute("hasApiary", hasApiary);
             redirectAttributes.addFlashAttribute("numberIsTaken", true);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.beehiveAddDTO", bindingResult);
-            return "redirect:/beehives/add?apiary=" + (apiary.isPresent() ? apiary.get().toString() : "");
+            return "redirect:/beehives/add" + (apiary.isPresent() ? "?apiary=" + beehiveAddDTO.getApiaryId().toString() : "");
         }
 
         beehiveService.addBeehive(beehiveAddDTO, userDetails.getUsername());

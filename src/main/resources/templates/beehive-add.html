@@ -14,12 +14,12 @@
 
     <h2 class="text-center text-white">Добави кошер</h2>
     <form class="main-form mx-auto col-md-8 col-lg-6 d-flex row g-3 justify-content-center"
-          th:action="@{/beehives/add}+${hasApiary ? '?apiary=' + apiary : ''}"
+          th:action="@{/beehives/add}+${hasApiary ? '?apiary=' + beehiveAddDTO.apiaryId : ''}"
           th:method="post"
           th:object="${beehiveAddDTO}">
 
 
-        <div class="form-group" th:if="${!hasApiary}">
+        <div class="form-group" th:styleappend="${hasApiary} ? 'visibility:hidden' : ''">
             <label class="text-center text-white font-weight-bold" for="apiaryId">Пчелин</label>
             <select id="apiaryId"
                     name="apiaryId"
