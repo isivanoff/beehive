@@ -85,4 +85,11 @@ public class BeehiveController {
 
     }
 
+    @GetMapping("/view/{id}")
+    public String view(Model model, @PathVariable Long id) {
+
+
+        return "beehive-view";
+    }
+
 }

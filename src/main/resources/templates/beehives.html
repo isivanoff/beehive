@@ -39,7 +39,7 @@
     }
 	.table-title {
 		padding-bottom: 15px;
-		background: #299be4;
+		background: #314444;
 		color: #fff;
 		padding: 16px 30px;
 		margin: -20px -25px 10px;
@@ -50,21 +50,12 @@
 		font-size: 24px;
 	}
 	.table-title .btn {
-		color: #566787;
 		float: right;
 		font-size: 13px;
-		background: #fff;
-		border: none;
 		min-width: 50px;
-		border-radius: 2px;
-		border: none;
-		outline: none !important;
 		margin-left: 10px;
 	}
-	.table-title .btn:hover, .table-title .btn:focus {
-        color: #566787;
-		background: #f2f2f2;
-	}
+
 	.table-title .btn i {
 		float: left;
 		font-size: 21px;
@@ -82,9 +73,9 @@
 	table.table tr th:first-child {
 		width: 60px;
 	}
-	table.table tr th:last-child {
-		width: 100px;
-	}
+	table.table tr th:last-child, table.table tr td:last-child  {
+        text-align: center;
+    }
     table.table-striped tbody tr:nth-of-type(odd) {
     	background-color: #fcfcfc;
 	}
@@ -101,21 +92,7 @@
 		font-size: 22px;
         margin: 0 5px;
     }
-	table.table td a {
-		font-weight: bold;
-		color: #566787;
-		display: inline-block;
-		text-decoration: none;
-	}
-	table.table td a:hover {
-		color: #2196F3;
-	}
-	table.table td a.settings {
-        color: #2196F3;
-    }
-    table.table td a.delete {
-        color: #F44336;
-    }
+
     table.table td i {
         font-size: 19px;
     }
@@ -159,28 +136,6 @@
         text-align: center;
         padding: 0 6px;
     }
-    .pagination li a:hover {
-        color: #666;
-    }
-    .pagination li.active a, .pagination li.active a.page-link {
-        background: #03A9F4;
-    }
-    .pagination li.active a:hover {
-        background: #0397d6;
-    }
-	.pagination li.disabled i {
-        color: #ccc;
-    }
-    .pagination li i {
-        font-size: 16px;
-        padding-top: 6px
-    }
-    .hint-text {
-        float: left;
-        margin-top: 10px;
-        font-size: 13px;
-    }
-
 
 
             </style>
@@ -192,10 +147,10 @@
                     <div class="table-wrapper">
                         <div class="table-title">
                             <div class="row">
-                                <div class="col-xs-5">
+                                <div class="col">
                                     <h2>Кошери</h2>
                                 </div>
-                                <div class="col-xs-7">
+                                <div class="col">
                                     <a th:href="@{/beehives/add?apiary=} + ${apiary.id}" class="btn btn-primary">
                                         <span>Добави кошер</span></a>
                                 </div>
@@ -209,28 +164,33 @@
                                 <th>Тип</th>
                                 <th>Цвят</th>
                                 <th>Статус</th>
-                                <th></th>
+                                <th>Действия</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="beehive: ${beehives}">
                                 <td><span th:text="${beehive.referenceNumber}">Номер</span></td>
-                                <td><a th:href="@{/beehives/view/} + ${beehive.id}"> <img th:src="${beehive.imageUrl}" width="150px"
-                                                      onerror="this.onerror=null;this.src='/images/beehive_placeholder.jpg'"
-                                                      ; alt="Beehive"/></a></td>
+                                <td><a th:href="@{/beehives/view/} + ${beehive.id}"> <img th:src="${beehive.imageUrl}"
+                                                                                          width="150px"
+                                                                                          onerror="this.onerror=null;this.src='/images/beehive_placeholder.jpg'"
+                                                                                          ; alt="Beehive"/></a></td>
                                 <td><span th:text="${beehive.type}">Тип</span></td>
                                 <td><span th:text="${beehive.color}">Цвят</span></td>
                                 <td>
-                                    <span th:if="${beehive.isAlive}" class="status text-success">&bull;</span><span th:if="${beehive.isAlive}">Жив</span>
-                                    <span th:if="${!beehive.isAlive}" class="status text-danger">&bull;</span><span th:if="${!beehive.isAlive}">Умрял</span>
+                                    <span th:if="${beehive.isAlive}" class="status text-success">&bull;</span><span
+                                        th:if="${beehive.isAlive}">Жив</span>
+                                    <span th:if="${!beehive.isAlive}" class="status text-danger">&bull;</span><span
+                                        th:if="${!beehive.isAlive}">Умрял</span>
                                 <td>
-                                <div class="btn-group">
-                                    <a th:href="@{/beehives/view/} + ${beehive.id}" class="btn btn-sm btn-outline-secondary">Към кошера</a>
-                                    <a th:href="@{/beehives/edit/} + ${beehive.id}" class="btn btn-sm btn-outline-secondary">Редактирай
-                                    </a>
-                                </div>
+                                    <div class="btn-group">
+                                        <a th:href="@{/beehives/view/} + ${beehive.id}"
+                                           class="btn btn-sm btn-outline-secondary">Към кошера</a>
+                                        <a th:href="@{/beehives/edit/} + ${beehive.id}"
+                                           class="btn btn-sm btn-outline-secondary">Редактирай
+                                        </a>
+                                    </div>
 
-                            </td>
+                                </td>
                             </tr>
 
                             </tbody>
