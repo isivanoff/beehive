@@ -171,7 +171,7 @@
                             <tr th:each="beehive: ${beehives}">
                                 <td><span th:text="${beehive.referenceNumber}">Номер</span></td>
                                 <td><a th:href="@{/beehives/view/} + ${beehive.id}"> <img th:src="${beehive.imageUrl}"
-                                                                                          width="150px"
+                                                                                          width="75px"
                                                                                           onerror="this.onerror=null;this.src='/images/beehive_placeholder.jpg'"
                                                                                           ; alt="Beehive"/></a></td>
                                 <td><span th:text="${beehive.type}">Тип</span></td>

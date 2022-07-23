@@ -15,6 +15,17 @@ public class BeehiveFullView {
     private String imageUrl;
     private QueenEntity queen;
     private String apiaryName;
+    private Long apiaryId;
+
+    public Long getApiaryId() {
+        return apiaryId;
+    }
+
+    public BeehiveFullView setApiaryId(Long apiaryId) {
+        this.apiaryId = apiaryId;
+        return this;
+    }
+
     private List<TaskView> tasks;
 
     public BeehiveFullView() {

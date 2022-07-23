@@ -63,4 +63,12 @@ public class BeehiveService {
     public BeehiveFullView viewById(Long id) {
         return modelMapper.map(beehiveRepository.findById(id), BeehiveFullView.class);
     }
+
+    public void deleteById(Long id) {
+        beehiveRepository.deleteById(id);
+    }
+
+    public Long findApiaryIdByBeehiveId(Long id) {
+        return beehiveRepository.findById(id).orElseThrow().getApiary().getId();
+    }
 }

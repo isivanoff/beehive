@@ -90,8 +90,21 @@ public class BeehiveController {
     public String view(Model model, @PathVariable Long id) {
         BeehiveFullView beehive = beehiveService.viewById(id);
         model.addAttribute("beehive", beehive);
-        System.out.println(beehive);
         return "beehive-view";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable Long id) {
+        Long apiaryId = beehiveService.findApiaryIdByBeehiveId(id);
+        beehiveService.deleteById(id);
+        return "redirect:/apiaries/view/" + apiaryId;
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(Model model, @AuthenticationPrincipal UserDetails userDetails, @RequestParam Long id, BeehiveAddDTO beehiveAddDTO) {
+
+
+        return "beehive-edit";
     }
 
 }

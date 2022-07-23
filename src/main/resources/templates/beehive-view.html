@@ -4,8 +4,8 @@
     <div th:replace="fragments/head">Head</div>
     <style>
     .table {
-        margin: 30px 0;
-    }
+        max-width: 1000px;
+        margin: auto;    }
 	.table-wrapper {
         background: #fff;
         padding: 20px 25px;
@@ -84,6 +84,7 @@
 
 
     </style>
+    <script src="/js/customJs.js"></script>
 </head>
 <body class="d-flex flex-column h-100">
 
@@ -105,9 +106,12 @@
                                      onerror="this.onerror=null;this.src='/images/beehive_placeholder.jpg';"/>
                             </div>
                             <div class="col-6 d-flex gap-2 flex-column justify-content-center px-4">
+                                <a th:href="@{/apiaries/view/}+${beehive.apiaryId}" class="btn btn-warning"
+                                   role="button">Обратно в
+                                    <th:block th:text="${beehive.apiaryName}"></th:block>
+                                </a>
                                 <a th:href="@{/beehives/edit/}+${beehive.id}" class="btn btn-primary" role="button">Редактиране</a>
-                                <a th:href="@{/beehives/delete/}+${beehive.id}"
-                                   class="btn btn-secondary">Изтриване</a>
+                                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">Изтриване</button>
                             </div>
                         </div>
                         <div class="row g-0">
@@ -116,9 +120,10 @@
                                     <h6>Информация</h6>
                                     <hr class="mt-0 mb-4">
                                     <div class="row pt-1">
-                                        <div class="col-2">
+                                        <div class="col-2 text-center">
                                             <h6>Номер</h6>
-                                            <p class="text-muted" th:text=${beehive.referenceNumber}>Номер</p>
+                                            <p class="badge fs-5 text-bg-warning" th:text=${beehive.referenceNumber}>
+                                                Номер</p>
                                         </div>
 
                                         <div class="col-3">
@@ -234,7 +239,26 @@
                 </div>
             </div>
         </div>
-</body>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изтриване на кошер</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Сигурни ли сте, че искате да изтриете кошера?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                <a th:href="@{/beehives/delete/} + ${beehive.id}" type="button" class="btn btn-primary" id="beehiveDeleteBtn">Изтриване</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 </main>
 
