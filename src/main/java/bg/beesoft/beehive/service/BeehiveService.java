@@ -5,6 +5,7 @@ import bg.beesoft.beehive.model.entity.ApiaryEntity;
 import bg.beesoft.beehive.model.entity.BeehiveEntity;
 import bg.beesoft.beehive.model.entity.QueenEntity;
 import bg.beesoft.beehive.model.entity.UserEntity;
+import bg.beesoft.beehive.model.view.BeehiveFullView;
 import bg.beesoft.beehive.model.view.BeehiveView;
 import bg.beesoft.beehive.repository.BeehiveRepository;
 import org.modelmapper.ModelMapper;
@@ -57,5 +58,9 @@ public class BeehiveService {
                 .stream()
                 .map(b -> modelMapper.map(b, BeehiveView.class))
                 .collect(Collectors.toList());
+    }
+
+    public BeehiveFullView viewById(Long id) {
+        return modelMapper.map(beehiveRepository.findById(id), BeehiveFullView.class);
     }
 }

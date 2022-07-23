@@ -2,6 +2,7 @@ package bg.beesoft.beehive.web;
 
 import bg.beesoft.beehive.model.dto.BeehiveAddDTO;
 import bg.beesoft.beehive.model.view.ApiaryView;
+import bg.beesoft.beehive.model.view.BeehiveFullView;
 import bg.beesoft.beehive.service.ApiaryService;
 import bg.beesoft.beehive.service.BeehiveService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -63,7 +64,7 @@ public class BeehiveController {
             redirectAttributes.addFlashAttribute("apiaries", apiaries);
             redirectAttributes.addFlashAttribute("hasApiary", hasApiary);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.beehiveAddDTO", bindingResult);
-            return "redirect:/beehives/add" + (apiary.isPresent() ? "?apiary=" + beehiveAddDTO.getApiaryId().toString() : "");
+            return "redirect:/beehives/add" + (hasApiary ? "?apiary=" + apiary.get().toString() : "");
         }
 
         boolean numberIsTaken = apiaryService.apiaryAlreadyHasBeehiveNumber(beehiveAddDTO.getApiaryId(), beehiveAddDTO.getReferenceNumber());
@@ -87,8 +88,9 @@ public class BeehiveController {
 
     @GetMapping("/view/{id}")
     public String view(Model model, @PathVariable Long id) {
-
-
+        BeehiveFullView beehive = beehiveService.viewById(id);
+        model.addAttribute("beehive", beehive);
+        System.out.println(beehive);
         return "beehive-view";
     }
 

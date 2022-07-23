@@ -94,27 +94,29 @@
             <input class="form-control" type="text" id="inputImg" th:field="*{imageUrl}" th:errorclass="is-invalid">
         </div>
 
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input"  th:checked="*{alive}" name="alive" id="alive">
+
+
+        <div class="form-check form-switch col-4 text-white">
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{alive}" name="alive" id="alive">
             <label class="form-check-label" for="alive">Кошерът е жив</label>
         </div>
 
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" th:checked="*{queenIsAlive}" name="queenIsAlive" id="queenIsAlive">
+        <div class="form-check form-switch col-4 text-white" >
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{queenIsAlive}" name="queenIsAlive" id="queenIsAlive">
             <label class="form-check-label" for="queenIsAlive">Жива майка</label>
         </div>
 
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" th:checked="*{queenIsActive}" name="queenIsActive" id="queenIsActive">
+        <div class="form-check form-switch col-4 text-white">
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{queenIsActive}" name="queenIsActive" id="queenIsActive">
             <label class="form-check-label" for="queenIsActive">Пронесла майка</label>
         </div>
 
-        <div class="form-check">
-            <input type="checkbox" class="form-check-input" th:checked="*{queenIsMarked}" name="queenIsMarked" id="queenIsMarked">
+        <div class="form-check form-switch col-4 text-white">
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{queenIsMarked}" name="queenIsMarked" id="queenIsMarked">
             <label class="form-check-label" for="queenIsMarked">Маркирана майка</label>
         </div>
 
-        <div class="form-group">
+        <div class="form-group col-8">
             <label for="dateOfMark" class="text-center text-white font-weight-bold">Дата на маркиране:</label>
             <input type="date" class="form-control" th:field="*{dateOfMark}"  id="dateOfMark"
                    th:errorclass="is-invalid"/>
