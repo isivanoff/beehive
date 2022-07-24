@@ -15,7 +15,6 @@ public class BeehiveAddDTO {
     private int referenceNumber;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
     private BeeHiveTypeEnum type;
 
     @NotNull

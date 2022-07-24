@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="fragments/head">Head</div>
+</head>
+<body class="d-flex flex-column h-100">
+
+<header>
+    <div th:replace="fragments/navbar">Navigation</div>
+</header>
+
+<div class="container-fluid pt-5 mb-4">
+    <div class="row" style="height: 4em;"></div>
+
+    <h2 class="text-center text-white">Инспекция</h2>
+    <form class="main-form mx-auto col-md-8 col-lg-6 d-flex row g-3 justify-content-center"
+          th:action="@{/tasks/}+*{beehiveId}+'/add'"
+          th:method="post"
+          th:object="${taskAddDTO}">
+
+        <h6>Майка</h6>
+        <hr class="mt-0 mb-4">
+
+        <div class="form-check form-switch col-4 text-white">
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{queenAlive}"
+                   name="queenAlive" id="queenAlive">
+            <label class="form-check-label" for="queenAlive">Жива майка</label>
+        </div>
+
+        <div class="form-check form-switch col-4 text-white">
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{queenActive}"
+                   name="queenActive" id="queenActive">
+            <label class="form-check-label" for="queenActive">Пронесла майка</label>
+        </div>
+
+        <div class="form-check form-switch col-4 text-white">
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{queenMarked}"
+                   name="queenMarked" id="queenMarked">
+            <label class="form-check-label" for="queenMarked">Маркирана майка</label>
+        </div>
+
+        <div class="form-group col-4">
+            <label for="queenDateOfMark" class="text-center text-white font-weight-bold">Дата на маркиране:</label>
+            <input type="date" class="form-control" th:field="*{queenDateOfMark}" id="queenDateOfMark"
+                   th:errorclass="is-invalid"/>
+            <p class="invalid-feedback errors alert alert-danger">
+                Датата трябва да е във формат dd-MM-yyyy и да е днес или преди това.
+            </p>
+        </div>
+
+        <h6>Семейство</h6>
+        <hr class="mt-0 mb-4">
+
+        <div class="row">
+            <div class="text-white col-2">Слабо</div>
+            <label for="power" class="form-label text-white text-center col-8">Нормално</label>
+            <div class="text-white col-2">Силно</div>
+        </div>
+        <div class="form-group col-8">
+            <input name="power" type="range" class="form-range" min="1" max="100" step="1"
+                   th:value="*{power} == 0 ? 50:*{power}" id="power">
+
+        </div>
+
+        <div class="form-group d-flex justify-content-between">
+            <label class="text-white p-2">Темперамент</label>
+            <div
+                    th:each="e : ${T(bg.beesoft.beehive.model.entity.enums.TemperamentEnum).values()}">
+                <input type="radio" th:field="*{temperament}" th:value="${e}" class="btn-check" name="options">
+                <label class="btn p-2 m-2" th:classappend="${e}" th:for="${#ids.prev('temperament')}"
+                       th:text="${e}">Темперамент</label>
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Добави</button>
+
+    </form>
+</div>
+
+<div th:replace="fragments/footer">Footer</div>
+
+</body>
+</html>
