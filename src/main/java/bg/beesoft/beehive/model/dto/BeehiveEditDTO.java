@@ -1,13 +1,12 @@
 package bg.beesoft.beehive.model.dto;
 
 import bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum;
+import bg.beesoft.beehive.model.entity.enums.TemperamentEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 public class BeehiveEditDTO {
@@ -43,6 +42,13 @@ public class BeehiveEditDTO {
 
     @NotNull
     private boolean queenActive;
+
+    @NotNull
+    @Min(1)
+    @Max(100)
+    private int power;
+
+    private TemperamentEnum temperament;
 
     @NotNull
     @Positive
@@ -166,5 +172,22 @@ public class BeehiveEditDTO {
                 '}';
     }
 
+    public int getPower() {
+        return power;
+    }
+
+    public BeehiveEditDTO setPower(int power) {
+        this.power = power;
+        return this;
+    }
+
+    public TemperamentEnum getTemperament() {
+        return temperament;
+    }
+
+    public BeehiveEditDTO setTemperament(TemperamentEnum temperament) {
+        this.temperament = temperament;
+        return this;
+    }
 }
 

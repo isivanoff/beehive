@@ -1,6 +1,7 @@
 package bg.beesoft.beehive.model.view;
 
 import bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum;
+import bg.beesoft.beehive.model.entity.enums.TemperamentEnum;
 
 public class BeehiveView {
 
@@ -67,4 +68,5 @@ public class BeehiveView {
         this.imageUrl = imageUrl;
         return this;
     }
+
 }

@@ -83,8 +83,8 @@
 	}
 
 
+
     </style>
-    <script src="/js/customJs.js"></script>
 </head>
 <body class="d-flex flex-column h-100">
 
@@ -111,7 +111,13 @@
                                     <th:block th:text="${beehive.apiaryName}"></th:block>
                                 </a>
                                 <a th:href="@{/beehives/edit/}+${beehive.id}" class="btn btn-primary" role="button">Редактиране</a>
-                                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">Изтриване</button>
+                                <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                    Изтриване
+                                </button>
+                                <button class="btn btn-outline-secondary" onclick="document.getElementById('inspections').scrollIntoView();">
+                                    Инспекции
+                                </button>
+
                             </div>
                         </div>
                         <div class="row g-0">
@@ -138,7 +144,10 @@
 
                                         <div class="col-2">
                                             <h6>Цвят</h6>
-                                            <input type="color" class="form-control form-control-color" colorpick-eyedropper-active="false" id="color" th:value="${beehive.color}" disabled name="color" title="Избери цвят">
+                                            <input type="color" class="form-control form-control-color"
+                                                   colorpick-eyedropper-active="false" id="color"
+                                                   th:value="${beehive.color}" disabled name="color"
+                                                   title="Избери цвят">
                                         </div>
 
                                         <div class="col-2">
@@ -193,6 +202,24 @@
                                         </div>
 
                                     </div>
+
+                                    <h6>Семейство</h6>
+                                    <hr class="mt-0 mb-4">
+
+                                    <div class="row">
+                                        <div class="col-2">Слабо</div>
+                                        <div class="text-center col-8">Нормално</div>
+                                        <div class="col-2">Силно</div>
+                                    </div>
+
+                                    <div class="progress">
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated" th:classappend="${beehive.temperament} + '-bar'" role="progressbar" aria-label="Success example" th:style="'width: ' + ${beehive.power} + '%'" th:aria-valuenow="${beehive.power}" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+
+                                    <div class="col-8 my-3">
+                                        <span><b>Темперамент:</b></span>
+                                        <span th:classAppend="${beehive.temperament}" th:text="${beehive.temperament}"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -204,17 +231,17 @@
     </section>
     <div class="row mx-auto justify-content-md-center">
 
-        <div class="container">
+        <div class="container" id="inspections">
             <div class="table">
                 <div class="table-wrapper">
                     <div class="table-title">
                         <div class="row">
                             <div class="col">
-                                <h2>Манипулации</h2>
+                                <h2>Инспекции</h2>
                             </div>
                             <div class="col">
                                 <a th:href="@{/beehives/} + ${beehive.id + '/add_task'}" class="btn btn-primary">
-                                    <span>Добави манипулация</span></a>
+                                    <span>Нова Инспекция</span></a>
                             </div>
                         </div>
                     </div>
@@ -254,7 +281,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
-                <a th:href="@{/beehives/delete/} + ${beehive.id}" type="button" class="btn btn-primary" id="beehiveDeleteBtn">Изтриване</a>
+                <a th:href="@{/beehives/delete/} + ${beehive.id}" type="button" class="btn btn-primary"
+                   id="beehiveDeleteBtn">Изтриване</a>
             </div>
         </div>
     </div>

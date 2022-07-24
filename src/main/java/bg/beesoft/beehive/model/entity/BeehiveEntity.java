@@ -2,8 +2,10 @@ package bg.beesoft.beehive.model.entity;
 
 
 import bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum;
+import bg.beesoft.beehive.model.entity.enums.TemperamentEnum;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -27,6 +29,12 @@ public class BeehiveEntity extends BaseEntity {
     @OneToOne(cascade = CascadeType.ALL ,optional = false)
     private QueenEntity queen;
 
+    private int power;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private TemperamentEnum temperament;
+
     @ManyToOne
     private ApiaryEntity apiary;
 
@@ -38,6 +46,15 @@ public class BeehiveEntity extends BaseEntity {
 
     public int getReferenceNumber() {
         return referenceNumber;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public BeehiveEntity setPower(int power) {
+        this.power = power;
+        return this;
     }
 
     public BeehiveEntity setReferenceNumber(int referenceNumber) {
@@ -116,6 +133,15 @@ public class BeehiveEntity extends BaseEntity {
 
     public BeehiveEntity setTasks(List<TaskEntity> tasks) {
         this.tasks = tasks;
+        return this;
+    }
+
+    public TemperamentEnum getTemperament() {
+        return temperament;
+    }
+
+    public BeehiveEntity setTemperament(TemperamentEnum temperament) {
+        this.temperament = temperament;
         return this;
     }
 }

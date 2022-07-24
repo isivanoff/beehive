@@ -50,7 +50,7 @@
             </p>
         </div>
 
-        <div class="form-group col-6">
+        <div class="form-group col-4">
             <label class="text-center text-white font-weight-bold" for="type">Тип кошер</label>
             <select id="type"
                     name="type"
@@ -69,14 +69,20 @@
             </p>
         </div>
 
-        <div class="form-group col-3 lh-1">
+        <div class="form-group col-2 lh-1">
             <label for="color" class="form-label text-white">Цвят</label>
-            <input type="color" class="form-control form-control-color" colorpick-eyedropper-active="false" id="color" th:value="*{color}"
+            <input type="color" class="form-control form-control-color" colorpick-eyedropper-active="false" id="color"
+                   th:value="*{color}"
                    th:errorclass="is-invalid" name="color"
                    title="Избери цвят">
             <p class="invalid-feedback errors alert alert-danger">
                 Задължително поле.
             </p>
+        </div>
+
+        <div class="form-check form-switch col-3 text-white">
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{alive}" name="alive" id="alive">
+            <label class="form-check-label" for="alive">Кошерът е жив</label>
         </div>
 
         <div class="form-group">
@@ -85,10 +91,8 @@
         </div>
 
 
-        <div class="form-check form-switch col-4 text-white">
-            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{alive}" name="alive" id="alive">
-            <label class="form-check-label" for="alive">Кошерът е жив</label>
-        </div>
+        <h6>Майка</h6>
+        <hr class="mt-0 mb-4">
 
         <div class="form-check form-switch col-4 text-white">
             <input type="checkbox" class="form-check-input" role="switch" th:checked="*{queenAlive}"
@@ -108,13 +112,37 @@
             <label class="form-check-label" for="queenMarked">Маркирана майка</label>
         </div>
 
-        <div class="form-group col-8">
+        <div class="form-group col-4">
             <label for="dateOfMark" class="text-center text-white font-weight-bold">Дата на маркиране:</label>
             <input type="date" class="form-control" th:field="*{dateOfMark}" id="dateOfMark"
                    th:errorclass="is-invalid"/>
             <p class="invalid-feedback errors alert alert-danger">
                 Датата трябва да е във формат dd-MM-yyyy и да е днес или преди това.
             </p>
+        </div>
+
+        <h6>Семейство</h6>
+        <hr class="mt-0 mb-4">
+
+        <div class="row">
+            <div class="text-white col-2">Слабо</div>
+            <label for="power" class="form-label text-white text-center col-8">Нормално</label>
+            <div class="text-white col-2">Силно</div>
+        </div>
+        <div class="form-group col-8">
+            <input name="power" type="range" class="form-range" min="1" max="100" step="1"
+                   th:value="*{power} == 0 ? 50:*{power}" id="power">
+
+        </div>
+
+        <div class="form-group d-flex justify-content-between">
+            <label class="text-white p-2">Темперамент</label>
+            <div
+                    th:each="e : ${T(bg.beesoft.beehive.model.entity.enums.TemperamentEnum).values()}">
+                <input type="radio" th:field="*{temperament}" th:value="${e}" class="btn-check" name="options">
+                <label class="btn p-2 m-2" th:classappend="${e}" th:for="${#ids.prev('temperament')}"
+                       th:text="${e}">Темперамент</label>
+            </div>
         </div>
 
 

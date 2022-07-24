@@ -1,13 +1,12 @@
 package bg.beesoft.beehive.model.dto;
 
 import bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum;
+import bg.beesoft.beehive.model.entity.enums.TemperamentEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PastOrPresent;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 public class BeehiveAddDTO {
@@ -41,14 +40,31 @@ public class BeehiveAddDTO {
     private boolean queenActive;
 
     @NotNull
+    @Min(1)
+    @Max(100)
+    private int power;
+
+
+    @NotNull
     @Positive
     private Long apiaryId;
+
+    private TemperamentEnum temperament;
 
     public BeehiveAddDTO() {
     }
 
     public int getReferenceNumber() {
         return referenceNumber;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public BeehiveAddDTO setPower(int power) {
+        this.power = power;
+        return this;
     }
 
     public BeehiveAddDTO setReferenceNumber(int referenceNumber) {
@@ -134,6 +150,15 @@ public class BeehiveAddDTO {
 
     public BeehiveAddDTO setApiaryId(Long apiaryId) {
         this.apiaryId = apiaryId;
+        return this;
+    }
+
+    public TemperamentEnum getTemperament() {
+        return temperament;
+    }
+
+    public BeehiveAddDTO setTemperament(TemperamentEnum temperament) {
+        this.temperament = temperament;
         return this;
     }
 }

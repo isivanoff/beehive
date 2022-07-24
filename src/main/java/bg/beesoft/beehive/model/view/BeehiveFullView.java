@@ -2,6 +2,7 @@ package bg.beesoft.beehive.model.view;
 
 import bg.beesoft.beehive.model.entity.QueenEntity;
 import bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum;
+import bg.beesoft.beehive.model.entity.enums.TemperamentEnum;
 
 import java.util.List;
 
@@ -15,6 +16,9 @@ public class BeehiveFullView {
     private QueenEntity queen;
     private String apiaryName;
     private Long apiaryId;
+    private int power;
+    private TemperamentEnum temperament;
+
 
     public Long getApiaryId() {
         return apiaryId;
@@ -124,5 +128,23 @@ public class BeehiveFullView {
                 ", apiaryName='" + apiaryName + '\'' +
                 ", tasks=" + tasks +
                 '}';
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public BeehiveFullView setPower(int power) {
+        this.power = power;
+        return this;
+    }
+
+    public TemperamentEnum getTemperament() {
+        return temperament;
+    }
+
+    public BeehiveFullView setTemperament(TemperamentEnum temperament) {
+        this.temperament = temperament;
+        return this;
     }
 }

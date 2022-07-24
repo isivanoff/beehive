@@ -88,6 +88,8 @@ public class BeehiveService {
                 setReferenceNumber(beehiveEditDTO.getReferenceNumber())
                 .setType(beehiveEditDTO.getType())
                 .setApiary(apiaryEntity)
+                .setPower(beehiveEditDTO.getPower())
+                .setTemperament(beehiveEditDTO.getTemperament())
                 .getQueen().setActive(beehiveEditDTO.isQueenActive())
                 .setAlive(beehiveEditDTO.isQueenAlive())
                 .setMarked(beehiveEditDTO.isQueenMarked())
