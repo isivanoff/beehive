@@ -11,7 +11,11 @@ import javax.validation.constraints.PastOrPresent;
 import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 
-public class BeehiveAddDTO {
+public class BeehiveEditDTO {
+
+
+    private Long id;
+
     @NotNull
     @Positive
     private int referenceNumber;
@@ -37,7 +41,7 @@ public class BeehiveAddDTO {
 
     @PastOrPresent
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate dateOfMark;
+    private LocalDate queenDateOfMark;
 
     @NotNull
     private boolean queenActive;
@@ -46,14 +50,14 @@ public class BeehiveAddDTO {
     @Positive
     private Long apiaryId;
 
-    public BeehiveAddDTO() {
+    public BeehiveEditDTO() {
     }
 
     public int getReferenceNumber() {
         return referenceNumber;
     }
 
-    public BeehiveAddDTO setReferenceNumber(int referenceNumber) {
+    public BeehiveEditDTO setReferenceNumber(int referenceNumber) {
         this.referenceNumber = referenceNumber;
         return this;
     }
@@ -62,7 +66,7 @@ public class BeehiveAddDTO {
         return type;
     }
 
-    public BeehiveAddDTO setType(BeeHiveTypeEnum type) {
+    public BeehiveEditDTO setType(BeeHiveTypeEnum type) {
         this.type = type;
         return this;
     }
@@ -71,7 +75,7 @@ public class BeehiveAddDTO {
         return color;
     }
 
-    public BeehiveAddDTO setColor(ColorEnum color) {
+    public BeehiveEditDTO setColor(ColorEnum color) {
         this.color = color;
         return this;
     }
@@ -80,7 +84,7 @@ public class BeehiveAddDTO {
         return alive;
     }
 
-    public BeehiveAddDTO setAlive(boolean alive) {
+    public BeehiveEditDTO setAlive(boolean alive) {
         this.alive = alive;
         return this;
     }
@@ -89,7 +93,7 @@ public class BeehiveAddDTO {
         return imageUrl;
     }
 
-    public BeehiveAddDTO setImageUrl(String imageUrl) {
+    public BeehiveEditDTO setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
         return this;
     }
@@ -98,7 +102,7 @@ public class BeehiveAddDTO {
         return queenAlive;
     }
 
-    public BeehiveAddDTO setQueenAlive(boolean queenAlive) {
+    public BeehiveEditDTO setQueenAlive(boolean queenAlive) {
         this.queenAlive = queenAlive;
         return this;
     }
@@ -107,17 +111,17 @@ public class BeehiveAddDTO {
         return queenMarked;
     }
 
-    public BeehiveAddDTO setQueenMarked(boolean queenMarked) {
+    public BeehiveEditDTO setQueenMarked(boolean queenMarked) {
         this.queenMarked = queenMarked;
         return this;
     }
 
-    public LocalDate getDateOfMark() {
-        return dateOfMark;
+    public LocalDate getQueenDateOfMark() {
+        return queenDateOfMark;
     }
 
-    public BeehiveAddDTO setDateOfMark(LocalDate dateOfMark) {
-        this.dateOfMark = dateOfMark;
+    public BeehiveEditDTO setQueenDateOfMark(LocalDate queenDateOfMark) {
+        this.queenDateOfMark = queenDateOfMark;
         return this;
     }
 
@@ -125,7 +129,7 @@ public class BeehiveAddDTO {
         return queenActive;
     }
 
-    public BeehiveAddDTO setQueenActive(boolean queenActive) {
+    public BeehiveEditDTO setQueenActive(boolean queenActive) {
         this.queenActive = queenActive;
         return this;
     }
@@ -134,8 +138,35 @@ public class BeehiveAddDTO {
         return apiaryId;
     }
 
-    public BeehiveAddDTO setApiaryId(Long apiaryId) {
+    public BeehiveEditDTO setApiaryId(Long apiaryId) {
         this.apiaryId = apiaryId;
         return this;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public BeehiveEditDTO setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "BeehiveAddDTO{" +
+                "referenceNumber=" + referenceNumber +
+                ", type=" + type +
+                ", color=" + color +
+                ", alive=" + alive +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", isQueenAlive=" + queenAlive +
+                ", queenIsMarked=" + queenMarked +
+                ", dateOfMark=" + queenDateOfMark +
+                ", queenIsActive=" + queenActive +
+                ", apiaryId=" + apiaryId +
+                '}';
+    }
+
 }
+

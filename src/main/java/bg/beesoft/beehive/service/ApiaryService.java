@@ -117,4 +117,12 @@ public class ApiaryService {
     public ApiaryView findViewById(Long id) {
         return modelMapper.map(findById(id),ApiaryView.class);
     }
+
+    public Long findIdByReferenceNumberInApiary(Long apiaryId, int referenceNumber) {
+        return apiaryRepository.
+                findById(apiaryId).orElseThrow().
+                getBeehives().stream().
+                filter(b->b.getReferenceNumber() == referenceNumber)
+                .map(b->b.getId()).findFirst().orElse(null);
+    }
 }

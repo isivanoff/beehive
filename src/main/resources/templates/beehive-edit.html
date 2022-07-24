@@ -12,13 +12,13 @@
 <div class="container-fluid pt-5 mb-4">
     <div class="row" style="height: 4em;"></div>
 
-    <h2 class="text-center text-white">Добави кошер</h2>
+    <h2 class="text-center text-white">Промяна на информация за кошер</h2>
     <form class="main-form mx-auto col-md-8 col-lg-6 d-flex row g-3 justify-content-center"
-          th:action="@{/beehives/add}+${hasApiary ? '?apiary=' + beehiveAddDTO.apiaryId : ''}"
+          th:action="@{/beehives/edit/}+${beehiveEditDTO.id}"
           th:method="post"
-          th:object="${beehiveAddDTO}">
+          th:object="${beehiveEditDTO}">
 
-        <div class="form-group" th:styleappend="${hasApiary} ? 'visibility:hidden; height: 1px;' : ''">
+        <div class="form-group">
             <label class="text-center text-white font-weight-bold" for="apiaryId">Пчелин</label>
             <select id="apiaryId"
                     name="apiaryId"
@@ -118,8 +118,8 @@
         </div>
 
         <div class="form-group col-8">
-            <label for="dateOfMark" class="text-center text-white font-weight-bold">Дата на маркиране:</label>
-            <input type="date" class="form-control" th:field="*{dateOfMark}" id="dateOfMark"
+            <label for="queenDateOfMark" class="text-center text-white font-weight-bold">Дата на маркиране:</label>
+            <input type="date" class="form-control" th:field="*{queenDateOfMark}" id="queenDateOfMark"
                    th:errorclass="is-invalid"/>
             <p class="invalid-feedback errors alert alert-danger">
                 Датата трябва да е във формат dd-MM-yyyy и да е днес или преди това.
@@ -127,7 +127,7 @@
         </div>
 
 
-        <button type="submit" class="btn btn-primary">Добави</button>
+        <button type="submit" class="btn btn-primary">Запази</button>
 
     </form>
 </div>

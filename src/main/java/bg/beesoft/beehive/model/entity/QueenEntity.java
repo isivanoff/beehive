@@ -9,31 +9,31 @@ import java.time.LocalDate;
 @Table(name = "queens")
 public class QueenEntity extends BaseEntity{
     @Column(nullable = false)
-    boolean isAlive;
+    boolean alive;
 
     @Column(nullable = false)
-    boolean isMarked;
+    boolean marked;
 
     LocalDate dateOfMark;
 
     @Column(nullable = false)
-    boolean isActive;
+    boolean active;
 
     public boolean isAlive() {
-        return isAlive;
+        return alive;
     }
 
     public QueenEntity setAlive(boolean alive) {
-        isAlive = alive;
+        this.alive = alive;
         return this;
     }
 
     public boolean isMarked() {
-        return isMarked;
+        return marked;
     }
 
     public QueenEntity setMarked(boolean marked) {
-        isMarked = marked;
+        this.marked = marked;
         return this;
     }
 
@@ -47,11 +47,11 @@ public class QueenEntity extends BaseEntity{
     }
 
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     public QueenEntity setActive(boolean active) {
-        isActive = active;
+        this.active = active;
         return this;
     }
 }

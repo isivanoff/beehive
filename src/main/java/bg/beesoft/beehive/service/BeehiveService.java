@@ -1,6 +1,7 @@
 package bg.beesoft.beehive.service;
 
 import bg.beesoft.beehive.model.dto.BeehiveAddDTO;
+import bg.beesoft.beehive.model.dto.BeehiveEditDTO;
 import bg.beesoft.beehive.model.entity.ApiaryEntity;
 import bg.beesoft.beehive.model.entity.BeehiveEntity;
 import bg.beesoft.beehive.model.entity.QueenEntity;
@@ -34,11 +35,11 @@ public class BeehiveService {
     public void addBeehive(BeehiveAddDTO beehiveAddDTO, String username) {
         BeehiveEntity beehiveEntity = modelMapper.map(beehiveAddDTO, BeehiveEntity.class);
         QueenEntity queenEntity = new QueenEntity().
-                setActive(beehiveAddDTO.isQueenIsActive()).
-                setAlive(beehiveAddDTO.isQueenIsAlive()).
-                setMarked(beehiveAddDTO.isQueenIsMarked()).
+                setActive(beehiveAddDTO.isQueenActive()).
+                setAlive(beehiveAddDTO.isQueenAlive()).
+                setMarked(beehiveAddDTO.isQueenMarked()).
                 setDateOfMark(beehiveAddDTO.getDateOfMark()).
-                setAlive(beehiveAddDTO.isQueenIsAlive());
+                setAlive(beehiveAddDTO.isQueenAlive());
         beehiveEntity.setId(null);
 
         queenService.add(queenEntity);
@@ -70,5 +71,28 @@ public class BeehiveService {
 
     public Long findApiaryIdByBeehiveId(Long id) {
         return beehiveRepository.findById(id).orElseThrow().getApiary().getId();
+    }
+
+    public BeehiveEditDTO getEditDTOById(Long id) {
+        return modelMapper.map(beehiveRepository.findById(id), BeehiveEditDTO.class);
+    }
+
+    public void updateBeehive(BeehiveEditDTO beehiveEditDTO) {
+        ApiaryEntity apiaryEntity = apiaryService.getById(beehiveEditDTO.getApiaryId());
+
+        BeehiveEntity beehiveEntity = beehiveRepository.findById(beehiveEditDTO.getId()).orElseThrow();
+
+        beehiveEntity.setAlive(beehiveEditDTO.isAlive()).
+                setImageUrl(beehiveEditDTO.getImageUrl()).
+                setColor(beehiveEditDTO.getColor()).
+                setReferenceNumber(beehiveEditDTO.getReferenceNumber())
+                .setType(beehiveEditDTO.getType())
+                .setApiary(apiaryEntity)
+                .getQueen().setActive(beehiveEditDTO.isQueenActive())
+                .setAlive(beehiveEditDTO.isQueenAlive())
+                .setMarked(beehiveEditDTO.isQueenMarked())
+                .setDateOfMark(beehiveEditDTO.getQueenDateOfMark());
+
+        beehiveRepository.save(beehiveEntity);
     }
 }
