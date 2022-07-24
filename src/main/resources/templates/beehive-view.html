@@ -138,7 +138,7 @@
 
                                         <div class="col-2">
                                             <h6>Цвят</h6>
-                                            <p class="text-muted" th:text=${beehive.color}>Цвят</p>
+                                            <input type="color" class="form-control form-control-color" colorpick-eyedropper-active="false" id="color" th:value="${beehive.color}" disabled name="color" title="Избери цвят">
                                         </div>
 
                                         <div class="col-2">

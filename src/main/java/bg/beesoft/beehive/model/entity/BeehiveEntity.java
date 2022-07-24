@@ -2,7 +2,6 @@ package bg.beesoft.beehive.model.entity;
 
 
 import bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum;
-import bg.beesoft.beehive.model.entity.enums.ColorEnum;
 
 import javax.persistence.*;
 import java.util.List;
@@ -18,8 +17,7 @@ public class BeehiveEntity extends BaseEntity {
     private BeeHiveTypeEnum type;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private ColorEnum color;
+    private String color;
 
     @Column(nullable = false)
     private boolean isAlive;
@@ -66,11 +64,11 @@ public class BeehiveEntity extends BaseEntity {
         return this;
     }
 
-    public ColorEnum getColor() {
+    public String getColor() {
         return color;
     }
 
-    public BeehiveEntity setColor(ColorEnum color) {
+    public BeehiveEntity setColor(String color) {
         this.color = color;
         return this;
     }

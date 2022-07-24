@@ -1,14 +1,13 @@
 package bg.beesoft.beehive.model.view;
 
 import bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum;
-import bg.beesoft.beehive.model.entity.enums.ColorEnum;
 
 public class BeehiveView {
 
     private Long id;
     private int referenceNumber;
     private BeeHiveTypeEnum type;
-    private ColorEnum color;
+    private String color;
     private boolean isAlive;
     private String imageUrl;
 
@@ -42,11 +41,11 @@ public class BeehiveView {
         return this;
     }
 
-    public ColorEnum getColor() {
+    public String getColor() {
         return color;
     }
 
-    public BeehiveView setColor(ColorEnum color) {
+    public BeehiveView setColor(String color) {
         this.color = color;
         return this;
     }

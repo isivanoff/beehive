@@ -138,6 +138,7 @@
     }
 
 
+
             </style>
 
             </head>
@@ -175,7 +176,10 @@
                                                                                           onerror="this.onerror=null;this.src='/images/beehive_placeholder.jpg'"
                                                                                           ; alt="Beehive"/></a></td>
                                 <td><span th:text="${beehive.type}">Тип</span></td>
-                                <td><span th:text="${beehive.color}">Цвят</span></td>
+                                <td><input type="color" class="form-control form-control-color"
+                                           colorpick-eyedropper-active="false" id="color" th:value="${beehive.color}"
+                                           disabled name="color" title="Избери цвят">
+                                </td>
                                 <td>
                                     <span th:if="${beehive.isAlive}" class="status text-success">&bull;</span><span
                                         th:if="${beehive.isAlive}">Жив</span>

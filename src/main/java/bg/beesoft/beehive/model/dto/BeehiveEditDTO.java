@@ -1,7 +1,6 @@
 package bg.beesoft.beehive.model.dto;
 
 import bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum;
-import bg.beesoft.beehive.model.entity.enums.ColorEnum;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.EnumType;
@@ -25,8 +24,7 @@ public class BeehiveEditDTO {
     private BeeHiveTypeEnum type;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    private ColorEnum color;
+    private String color;
 
     @NotNull
     private boolean alive;
@@ -71,11 +69,11 @@ public class BeehiveEditDTO {
         return this;
     }
 
-    public ColorEnum getColor() {
+    public String getColor() {
         return color;
     }
 
-    public BeehiveEditDTO setColor(ColorEnum color) {
+    public BeehiveEditDTO setColor(String color) {
         this.color = color;
         return this;
     }

@@ -2,7 +2,6 @@ package bg.beesoft.beehive.model.view;
 
 import bg.beesoft.beehive.model.entity.QueenEntity;
 import bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum;
-import bg.beesoft.beehive.model.entity.enums.ColorEnum;
 
 import java.util.List;
 
@@ -10,7 +9,7 @@ public class BeehiveFullView {
     private Long id;
     private int referenceNumber;
     private BeeHiveTypeEnum type;
-    private ColorEnum color;
+    private String color;
     private boolean isAlive;
     private String imageUrl;
     private QueenEntity queen;
@@ -58,11 +57,11 @@ public class BeehiveFullView {
         return this;
     }
 
-    public ColorEnum getColor() {
+    public String getColor() {
         return color;
     }
 
-    public BeehiveFullView setColor(ColorEnum color) {
+    public BeehiveFullView setColor(String color) {
         this.color = color;
         return this;
     }
