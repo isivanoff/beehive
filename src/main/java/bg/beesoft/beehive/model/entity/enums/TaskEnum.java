@@ -9,5 +9,6 @@ public enum TaskEnum {
     QUUEN_MARK,
     EXTENDING,
     NARROWING,
+    WINTER_PREPARE,
     OTHER
 }

@@ -101,4 +101,8 @@ public class BeehiveService {
     public BeehiveEntity findById(Long id) {
         return beehiveRepository.findById(id).orElseThrow();
     }
+
+    public void save(BeehiveEntity beehiveEntity) {
+        beehiveRepository.save(beehiveEntity);
+    }
 }

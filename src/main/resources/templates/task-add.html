@@ -10,13 +10,45 @@
 </header>
 
 <div class="container-fluid pt-5 mb-4">
-    <div class="row" style="height: 4em;"></div>
+    <div class="row" style="height: 2em;"></div>
 
     <h2 class="text-center text-white">Инспекция</h2>
     <form class="main-form mx-auto col-md-8 col-lg-6 d-flex row g-3 justify-content-center"
           th:action="@{/tasks/}+*{beehiveId}+'/add'"
           th:method="post"
           th:object="${taskAddDTO}">
+
+        <h6>Информация</h6>
+        <hr class="mt-0 mb-4">
+
+        <div class="form-group col-4">
+            <label class="text-center text-white font-weight-bold" for="task">Дейност</label>
+            <select id="task"
+                    name="task"
+                    th:errorclass="is-invalid"
+                    class="form-select">
+                <option value="">- Дейност -</option>
+                <option th:each="e : ${T(bg.beesoft.beehive.model.entity.enums.TaskEnum).values()}"
+                        th:text="${e}"
+                        th:value="${e}"
+                        th:selected="${e} == *{task}">
+                    Дейност
+                </option>
+            </select>
+            <p class="invalid-feedback errors alert alert-danger">
+                Задължително поле.
+            </p>
+        </div>
+
+        <div class="form-group col-4">
+            <label for="date" class="text-center text-white font-weight-bold">Дата на Инспекцията:</label>
+            <input type="date" class="form-control" th:field="*{date}" id="date"
+                   th:errorclass="is-invalid"/>
+            <p class="invalid-feedback errors alert alert-danger">
+                Датата трябва да е във формат dd-MM-yyyy и да е днес или преди това.
+            </p>
+        </div>
+
 
         <h6>Майка</h6>
         <hr class="mt-0 mb-4">
@@ -72,6 +104,69 @@
             </div>
         </div>
 
+
+        <h6>Наблюдения</h6>
+        <hr class="mt-0 mb-4">
+
+        <div class="form-check form-switch col-6 text-white">
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{eggs}"
+                   name="eggs" id="eggs">
+            <label class="form-check-label" for="eggs">Забелязани яйца</label>
+        </div>
+
+        <div class="form-check form-switch col-6 text-white">
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{larva}"
+                   name="larva" id="larva">
+            <label class="form-check-label" for="larva">Забелязани ларви</label>
+        </div>
+
+        <div class="form-check form-switch col-6 text-white">
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{puppa}"
+                   name="puppa" id="puppa">
+            <label class="form-check-label" for="puppa">Забелязани какавиди</label>
+        </div>
+
+        <div class="form-check form-switch col-6 text-white">
+            <input type="checkbox" class="form-check-input" role="switch" th:checked="*{disease}"
+                   name="disease" id="disease">
+            <label class="form-check-label" for="disease">Забелязани болести/паразити</label>
+        </div>
+
+        <div class="form-group col-4">
+            <label class="text-center text-white font-weight-bold" for="beeFrames">Рамки с пчели</label>
+            <input type="number" class="form-control" th:field="*{beeFrames}" id="beeFrames"
+            >
+        </div>
+
+        <div class="form-group col-4">
+            <label class="text-center text-white font-weight-bold" for="broodFrames">Рамки с пило</label>
+            <input type="number" class="form-control" th:field="*{broodFrames}" id="broodFrames"
+            >
+        </div>
+
+        <div class="form-group col-4">
+            <label class="text-center text-white font-weight-bold" for="honeyFrames">Рамки с мед</label>
+            <input type="number" class="form-control" th:field="*{honeyFrames}" id="honeyFrames"
+            >
+        </div>
+
+        <div class="form-group col-4">
+            <label class="text-center text-white font-weight-bold" for="pollenFrames">Рамки с прашец</label>
+            <input type="number" class="form-control" th:field="*{pollenFrames}" id="pollenFrames"
+            >
+        </div>
+
+        <div class="form-group col-4">
+            <label class="text-center text-white font-weight-bold" for="foundationFrames">Основи за градеж</label>
+            <input type="number" class="form-control" th:field="*{foundationFrames}" id="foundationFrames"
+            >
+        </div>
+
+        <div class="form-group col-8">
+            <label class="text-center text-white font-weight-bold" for="notes">Бележки</label>
+            <textarea class="form-control" name="notes" rows="5" cols="70" th:field="*{notes}"
+                      id="notes">Бележки</textarea>
+        </div>
 
         <button type="submit" class="btn btn-primary">Добави</button>
 

@@ -41,7 +41,6 @@ public class TaskEntity extends BaseEntity {
     @Column(nullable = false)
     private boolean queenMarked;
 
-    @Column(nullable = false)
     private LocalDate queenDateOfMark;
 
     @Column(nullable = false)
@@ -191,6 +190,51 @@ public class TaskEntity extends BaseEntity {
 
     public TaskEntity setNotes(String notes) {
         this.notes = notes;
+        return this;
+    }
+
+    public Long getQueenId() {
+        return queenId;
+    }
+
+    public TaskEntity setQueenId(Long queenId) {
+        this.queenId = queenId;
+        return this;
+    }
+
+    public boolean isQueenAlive() {
+        return queenAlive;
+    }
+
+    public TaskEntity setQueenAlive(boolean queenAlive) {
+        this.queenAlive = queenAlive;
+        return this;
+    }
+
+    public boolean isQueenMarked() {
+        return queenMarked;
+    }
+
+    public TaskEntity setQueenMarked(boolean queenMarked) {
+        this.queenMarked = queenMarked;
+        return this;
+    }
+
+    public LocalDate getQueenDateOfMark() {
+        return queenDateOfMark;
+    }
+
+    public TaskEntity setQueenDateOfMark(LocalDate queenDateOfMark) {
+        this.queenDateOfMark = queenDateOfMark;
+        return this;
+    }
+
+    public boolean isQueenActive() {
+        return queenActive;
+    }
+
+    public TaskEntity setQueenActive(boolean queenActive) {
+        this.queenActive = queenActive;
         return this;
     }
 

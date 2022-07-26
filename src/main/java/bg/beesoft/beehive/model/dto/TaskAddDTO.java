@@ -22,7 +22,6 @@ public class TaskAddDTO {
 
     private String notes;
 
-    @NotNull
     private Long beehiveId;
 
     @NotNull
@@ -41,7 +40,6 @@ public class TaskAddDTO {
     @NotNull
     private boolean queenMarked;
 
-    @PastOrPresent
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate queenDateOfMark;
 
