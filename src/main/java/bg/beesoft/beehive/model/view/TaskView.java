@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class TaskView {
     private Long id;
     private LocalDate date;
-    private TaskEnum description;
+    private TaskEnum task;
     private String notes;
 
     public TaskView() {
@@ -31,12 +31,12 @@ public class TaskView {
         return this;
     }
 
-    public TaskEnum getDescription() {
-        return description;
+    public TaskEnum getTask() {
+        return task;
     }
 
-    public TaskView setDescription(TaskEnum description) {
-        this.description = description;
+    public TaskView setTask(TaskEnum task) {
+        this.task = task;
         return this;
     }
 

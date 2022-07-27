@@ -251,14 +251,24 @@
                             <th>Дата</th>
                             <th>Действие</th>
                             <th>Бележки</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="task: ${beehive.tasks}">
                             <td><span th:text="${task.date}">Дата</span></td>
-                            <td><span th:text="${task.description}">Действие</span></td>
+                            <td><span th:text="${task.task}">Действие</span></td>
                             <td><span th:text="${task.notes}">Бележки</span></td>
+                            <td>
+                                <div class="btn-group">
+                                    <a th:href="@{/tasks/view/} + ${task.id}"
+                                       class="btn btn-sm btn-outline-secondary">Детайли</a>
+                                    <a th:href="@{/tasks/edit/} + ${task.id}"
+                                       class="btn btn-sm btn-outline-secondary">Изтрии
+                                    </a>
+                                </div>
 
+                            </td>
                         </tr>
 
                         </tbody>
