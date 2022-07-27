@@ -3,10 +3,15 @@ package bg.beesoft.beehive.service;
 import bg.beesoft.beehive.model.dto.TaskAddDTO;
 import bg.beesoft.beehive.model.entity.BeehiveEntity;
 import bg.beesoft.beehive.model.entity.TaskEntity;
+import bg.beesoft.beehive.model.view.TaskFullView;
+import bg.beesoft.beehive.model.view.TaskView;
 import bg.beesoft.beehive.repository.TaskRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -40,5 +45,17 @@ public class TaskService {
         TaskEntity taskEntity = modelMapper.map(taskAddDTO,TaskEntity.class);
         taskEntity.setBeehive(beehiveEntity);
         taskRepository.save(taskEntity);
+    }
+
+    public List<TaskView> findAllByBeehiveId(Long beehiveId) {
+        return taskRepository.findAllByBeehiveId(beehiveId)
+                .stream()
+                .map(t->modelMapper.map(t,TaskView.class))
+                .sorted((a,b)->b.getDate().compareTo(a.getDate()))
+                .collect(Collectors.toList());
+    }
+
+    public TaskFullView findViewById(Long taskId) {
+        return modelMapper.map(taskRepository.findById(taskId),TaskFullView.class);
     }
 }

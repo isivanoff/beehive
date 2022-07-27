@@ -84,13 +84,27 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
     </style>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
+
 </head>
 <body class="d-flex flex-column h-100">
 
 <header>
     <div th:replace="fragments/navbar">Navigation</div>
 </header>
+<input type="hidden" name="beehiveId" id="beehiveId" th:value="${beehive.id}">
 
 <div class="container-fluid pt-5 mb-4">
     <div class="row" style="height: 2em;"></div>
@@ -114,7 +128,8 @@
                                 <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">
                                     Изтриване
                                 </button>
-                                <button class="btn btn-outline-secondary" onclick="document.getElementById('inspections').scrollIntoView();">
+                                <button class="btn btn-outline-secondary"
+                                        onclick="document.getElementById('inspections').scrollIntoView();">
                                     Инспекции
                                 </button>
 
@@ -213,12 +228,17 @@
                                     </div>
 
                                     <div class="progress">
-                                        <div class="progress-bar progress-bar-striped progress-bar-animated" th:classappend="${beehive.temperament} + '-bar'" role="progressbar" aria-label="Success example" th:style="'width: ' + ${beehive.power} + '%'" th:aria-valuenow="${beehive.power}" aria-valuemin="0" aria-valuemax="100"></div>
+                                        <div class="progress-bar progress-bar-striped progress-bar-animated"
+                                             th:classappend="${beehive.temperament} + '-bar'" role="progressbar"
+                                             aria-label="Success example" th:style="'width: ' + ${beehive.power} + '%'"
+                                             th:aria-valuenow="${beehive.power}" aria-valuemin="0"
+                                             aria-valuemax="100"></div>
                                     </div>
 
                                     <div class="col-8 my-3">
                                         <span><b>Темперамент:</b></span>
-                                        <span th:classAppend="${beehive.temperament}" th:text="${beehive.temperament}"></span>
+                                        <span th:classAppend="${beehive.temperament}"
+                                              th:text="${beehive.temperament}"></span>
                                     </div>
                                 </div>
                             </div>
@@ -254,23 +274,29 @@
                             <th></th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr th:each="task: ${beehive.tasks}">
-                            <td><span th:text="${task.date}">Дата</span></td>
-                            <td><span th:text="${task.task}">Действие</span></td>
-                            <td><span th:text="${task.notes}">Бележки</span></td>
+                        <tbody id="tasks">
+                        <tr>
                             <td>
-                                <div class="btn-group">
-                                    <a th:href="@{/tasks/view/} + ${task.id}"
-                                       class="btn btn-sm btn-outline-secondary">Детайли</a>
-                                    <a th:href="@{/tasks/edit/} + ${task.id}"
-                                       class="btn btn-sm btn-outline-secondary">Изтрии
-                                    </a>
-                                </div>
-
+                                <p class="placeholder-glow">
+                                    <span class="placeholder col-12"></span>
+                                </p>
+                            </td>
+                            <td>
+                                <p class="placeholder-glow">
+                                    <span class="placeholder col-12"></span>
+                                </p>
+                            </td>
+                            <td>
+                                <p class="placeholder-glow">
+                                    <span class="placeholder col-12"></span>
+                                </p>
+                            </td>
+                            <td>
+                                <p class="placeholder-glow">
+                                    <span class="placeholder col-12"></span>
+                                </p>
                             </td>
                         </tr>
-
                         </tbody>
                     </table>
                 </div>
@@ -299,6 +325,176 @@
 </div>
 
 </main>
+<script id="taskTemplate" type="text/x-jquery-tmpl">
+    <tr>
+        <td><span>${date}</span></td>
+        <td><span>${task}</span></td>
+        <td><span>${notes}</span></td>
+        <td>
+            <div class="btn-group">
+                <button type="button" th:onclick="taskDetails(${id})"
+                   class="btn btn-sm btn-outline-secondary"
+                   data-bs-toggle="modal" data-bs-target="#taskFullModal"
+                   >Детайли</a>
+                <button th:href="@{/tasks/edit/} + ${id}"
+                   class="btn btn-sm btn-outline-secondary">Изтрии
+                </button>
+            </div>
+
+        </td>
+    </tr>
+
+
+
+
+</script>
+
+<div class="modal fade" id="taskFullModal" tabindex="-1" aria-labelledby="taskFullModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="taskFullModalLabel">Инспекция</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body"
+                 id="fullModalContent">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script id="loading" type="text/x-jquery-tmpl">
+
+<div class="d-flex align-items-center text-center">
+    <strong>Loading...</strong>
+    <div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div>
+</div>
+
+</script>
+<script id="taskFullTemplate" type="text/x-jquery-tmpl">
+        <h6>Информация</h6>
+        <hr class="mt-0 mb-4">
+
+        <div class="row mb-4 mx-auto">
+            <div class="col-4"><b>Дейност</b>: ${task}</div>
+            <div class="col-4"><b>Дата</b>: ${date}</div>
+        </div>
+
+        <h6>Майка</h6>
+        <hr class="mt-0 mb-4">
+
+        <div class="row mb-4 mx-auto">
+        <div class="form-check form-switch col-6">
+            <input type="checkbox" class="form-check-input" role="switch"
+                   name="queenAlive" id="queenAlive" disabled>
+            <label class="form-check-label" for="queenAlive">Жива майка</label>
+        </div>
+
+        <div class="form-check form-switch col-6">
+            <input type="checkbox" class="form-check-input" role="switch"
+                   name="queenActive" id="queenActive" disabled>
+            <label class="form-check-label" for="queenActive">Пронесла майка</label>
+        </div>
+
+        <div class="form-check form-switch col-6">
+            <input type="checkbox" class="form-check-input" role="switch"
+                   name="queenMarked" id="queenMarked" disabled>
+            <label class="form-check-label" for="queenMarked">Маркирана майка</label>
+        </div>
+
+        <div class="col-6" id="queenDateOfMark"><b>Дата на маркиране</b>: ${queenDateOfMark}</div>
+
+
+        </div>
+
+        <h6>Семейство</h6>
+        <hr class="mt-0 mb-4">
+            <div class="row">
+                <div class="col-2">Слабо</div>
+                <div class="text-center col-8">Нормално</div>
+                <div class="col-2">Силно</div>
+            </div>
+
+            <div class="progress">
+                <div class="progress-bar progress-bar-striped progress-bar-animated"
+                     aria-label="Success example" style="width:${power}%"
+                     aria-valuenow="${power}" aria-valuemin="0"
+                     aria-valuemax="100"></div>
+            </div>
+        <div class="row mb-4 mx-auto">
+
+            <div class="col-8 my-3">
+                <span><b>Темперамент:</b></span>
+                <span id="temper">${temperament}</span>
+            </div>
+        </div>
+        <h6>Наблюдения</h6>
+        <hr class="mt-0 mb-4">
+        <div class="row mb-4 mx-auto">
+
+ <div class="form-check form-switch col-6">
+            <input type="checkbox" class="form-check-input" role="switch"
+                   name="eggs" id="eggs" disabled>
+            <label class="form-check-label" for="eggs">Забелязани яйца</label>
+        </div>
+
+        <div class="form-check form-switch col-6 ">
+            <input type="checkbox" class="form-check-input" role="switch"
+                   name="larva" id="larva" disabled>
+            <label class="form-check-label" for="larva">Забелязани ларви</label>
+        </div>
+
+        <div class="form-check form-switch col-6">
+            <input type="checkbox" class="form-check-input" role="switch"
+                   name="puppa" id="puppa" disabled>
+            <label class="form-check-label" for="puppa">Забелязани какавиди</label>
+        </div>
+
+        <div class="form-check form-switch col-6 ">
+            <input type="checkbox" class="form-check-input" role="switch"
+                   name="disease" id="disease" disabled>
+            <label class="form-check-label" for="disease">Забелязани болести/паразити</label>
+        </div>
+
+        <div class="form-group col-4">
+            <label class="text-center  font-weight-bold" for="beeFrames">Рамки с пчели</label>
+            <input type="number" class="form-control" value="${beeFrames}" id="beeFrames" disabled
+            >
+        </div>
+
+        <div class="form-group col-4">
+            <label class="text-center  font-weight-bold" for="broodFrames">Рамки с пило</label>
+            <input type="number" class="form-control" value="${broodFrames}" id="broodFrames" disabled
+            >
+        </div>
+
+        <div class="form-group col-4">
+            <label class="text-center  font-weight-bold" for="honeyFrames">Рамки с мед</label>
+            <input type="number" class="form-control" value="${honeyFrames}" id="honeyFrames" disabled
+            >
+        </div>
+
+        <div class="form-group col-4">
+            <label class="text-center  font-weight-bold" for="pollenFrames">Рамки с прашец</label>
+            <input type="number" class="form-control" value="${pollenFrames}" id="pollenFrames" disabled
+            >
+        </div>
+
+        <div class="form-group col-4">
+            <label class="text-center  font-weight-bold" for="foundationFrames">Основи за градеж</label>
+            <input type="number" class="form-control" value="${foundationFrames}" id="foundationFrames" disabled
+            >
+        </div>
+
+        <div class="form-group col-8">
+            <label class="text-center  font-weight-bold" for="notes">Бележки</label>
+            <textarea class="form-control" name="notes" rows="5" cols="70"  id="notes" disabled>${notes}</textarea>
+        </div>
+</div>
+
+
+</script>
+<script th:src="@{/js/tasks.js}"></script>
 
 </div>
 

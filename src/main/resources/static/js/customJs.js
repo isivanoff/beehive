@@ -1,4 +1,9 @@
 $ (document).ready(function(){
+    updateTemperColor();
+
+});
+
+function updateTemperColor(){
     $ (".AGRESSIVE").addClass("badge text-bg-danger");
     $ (".CALM").addClass("badge text-bg-success");
     $ (".NORMAL").addClass("badge text-bg-warning");
@@ -6,5 +11,4 @@ $ (document).ready(function(){
     $ (".AGRESSIVE-bar").addClass("text-bg-danger");
     $ (".CALM-bar").addClass("text-bg-success");
     $ (".NORMAL-bar").addClass("text-bg-warning");
-
-});
+    }
