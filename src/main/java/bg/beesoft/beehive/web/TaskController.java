@@ -29,7 +29,7 @@ public class TaskController {
     }
 
     @GetMapping("/{id}/add")
-    public String add(Model model, @PathVariable Long id){
+    public String addTask(@PathVariable Long id){
         return "task-add";
     }
 

@@ -58,4 +58,12 @@ public class TaskService {
     public TaskFullView findViewById(Long taskId) {
         return modelMapper.map(taskRepository.findById(taskId),TaskFullView.class);
     }
+
+    public boolean deleteById(Long taskId) {
+        if(taskRepository.existsById(taskId)){
+             taskRepository.deleteById(taskId);
+            return true;
+        }
+        return false;
+    }
 }

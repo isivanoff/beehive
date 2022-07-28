@@ -95,6 +95,7 @@
 
 
 
+
     </style>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
 
@@ -112,7 +113,7 @@
     <section>
         <div class="container py-3 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
-                <div class="col col-lg-6 mb-4 mb-lg-0">
+                <div class="col col-8 mb-4 mb-lg-0">
                     <div class="card mb-3" style="border-radius: .5rem;">
                         <div class="row g-0 text-center text-white">
                             <div class="my-3 col-6">
@@ -335,14 +336,16 @@
                 <button type="button" th:onclick="taskDetails(${id})"
                    class="btn btn-sm btn-outline-secondary"
                    data-bs-toggle="modal" data-bs-target="#taskFullModal"
-                   >Детайли</a>
-                <button th:href="@{/tasks/edit/} + ${id}"
-                   class="btn btn-sm btn-outline-secondary">Изтрии
-                </button>
+                   >Детайли</button>
+               <button type="button"
+                   class="btn btn-sm btn-outline-secondary" onclick="updateModalDelete(${id})"
+                   data-bs-toggle="modal" data-bs-target="#deleteTaskModal"
+                   >Изтриване</button>
             </div>
 
         </td>
     </tr>
+
 
 
 
@@ -370,7 +373,9 @@
     <div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div>
 </div>
 
+
 </script>
+
 <script id="taskFullTemplate" type="text/x-jquery-tmpl">
         <h6>Информация</h6>
         <hr class="mt-0 mb-4">
@@ -493,7 +498,41 @@
 </div>
 
 
+
 </script>
+
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="deleteTaskModal" tabindex="-1" aria-labelledby="deleteTaskModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteTaskModalLabel">Изтриване</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Потвърждавате ли изтриването на задачата?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+
+                <button id="deleteTaskModalButton" data-bs-dismiss="modal"
+                        class="btn btn-sm btn-outline-secondary">Изтриване
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</div>
 <script th:src="@{/js/tasks.js}"></script>
 
 </div>
