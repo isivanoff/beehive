@@ -76,7 +76,7 @@
 
             <div class="album pb-5">
                 <div class="container">
-                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3 justify-content-center">
 
                         <div class="col" th:each="apiary : ${apiaries}">
                             <div class="card text-center shadow-sm h-100">
@@ -88,8 +88,8 @@
                                 <div class="card-body">
                                     <h5 class="card-title" th:text="${apiary.name}">Name</h5>
                                     <p class="card-text text-start">
-                                       Град: <span th:text="${apiary.address.city}">град</span><br/>
-                                       Адрес: <span th:text="${apiary.address.street}">адрес</span><br/>
+                                       Град: <span th:text="${apiary.addressCity}">град</span><br/>
+                                       Адрес: <span th:text="${apiary.addressStreet}">адрес</span><br/>
                                        Площ: <span th:text="${apiary.area}">площ</span> дка.<br/>
                                        Кошери: <span th:text="${apiary.beehives.size()}">кошери</span><br/>
                                     </p>

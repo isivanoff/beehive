@@ -2,8 +2,12 @@ package bg.beesoft.beehive.service;
 
 import bg.beesoft.beehive.model.dto.ApiaryAddDTO;
 import bg.beesoft.beehive.model.dto.ApiaryEditDTO;
-import bg.beesoft.beehive.model.entity.*;
+import bg.beesoft.beehive.model.entity.AddressEntity;
+import bg.beesoft.beehive.model.entity.ApiaryEntity;
+import bg.beesoft.beehive.model.entity.BeehiveEntity;
+import bg.beesoft.beehive.model.entity.UserEntity;
 import bg.beesoft.beehive.model.view.ApiaryView;
+import bg.beesoft.beehive.model.view.BeehiveView;
 import bg.beesoft.beehive.repository.ApiaryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -51,8 +55,19 @@ public class ApiaryService {
         apiaryRepository.save(apiaryEntity);
     }
 
-    public List<ApiaryEntity> findAllApiaries(String email) {
-        return apiaryRepository.findByBeekeeperEmail(email);
+    public List<ApiaryView> findAllApiaries(String email) {
+
+        List<ApiaryEntity> apiaries = apiaryRepository.findByBeekeeperEmail(email);
+        List<ApiaryView> apiaryViews = apiaries
+                .stream()
+                .map(e -> modelMapper.map(e, ApiaryView.class))
+                .collect(Collectors.toList());
+
+//        apiaries.stream().forEach(ap-> apiaryViews.get(apiaries.indexOf(ap))
+//                .setBeehives(ap.getBeehives().stream()
+//                        .map(b->modelMapper.map(b, BeehiveView.class)).collect(Collectors.toList())));
+
+    return apiaryViews;
     }
 
     public ApiaryEditDTO findById(Long id) {
@@ -115,14 +130,14 @@ public class ApiaryService {
     }
 
     public ApiaryView findViewById(Long id) {
-        return modelMapper.map(findById(id),ApiaryView.class);
+        return modelMapper.map(findById(id), ApiaryView.class);
     }
 
     public Long findIdByReferenceNumberInApiary(Long apiaryId, int referenceNumber) {
         return apiaryRepository.
                 findById(apiaryId).orElseThrow().
                 getBeehives().stream().
-                filter(b->b.getReferenceNumber() == referenceNumber)
-                .map(b->b.getId()).findFirst().orElse(null);
+                filter(b -> b.getReferenceNumber() == referenceNumber)
+                .map(b -> b.getId()).findFirst().orElse(null);
     }
 }

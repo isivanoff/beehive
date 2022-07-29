@@ -15,17 +15,6 @@
     <div class="row mx-auto justify-content-md-center">
 
         <main>
-            <section class="text-center container">
-                <div class="row py-3">
-                    <div class="col-lg-6 col-md-8 mx-auto">
-                        <h1 class="fw-light" th:text="${apiary.name}"></h1>
-                        <p class="lead text-muted" th:if="${beehives.size() == 0}">Тук се намира информация за Кошерите
-                            в този пчелин. Можете да добавяте нови
-                            или да редактирате вече добавените.</p>
-                    </div>
-                </div>
-            </section>
-
             <style>
     .table-responsive {
         margin: 30px 0;
@@ -139,6 +128,8 @@
 
 
 
+
+
             </style>
 
             </head>
@@ -147,12 +138,35 @@
                 <div class="table-responsive">
                     <div class="table-wrapper">
                         <div class="table-title">
+                            <div class="row justify-content-center">
+                                <div class="card mb-3 p-0" style="max-height:200px;">
+                                    <div class="row g-0">
+                                        <div class="col-md-4">
+                                            <img th:src="${apiary.imageUrl}" class="img-fluid rounded-start" alt="..."
+                                                 style="max-height: 198px; width: 100%; object-fit: cover;">
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="card-body text-black">
+                                                <h5 class="card-title" th:text="${apiary.name}"></h5>
+                                                <p class="card-text text-start">
+                                                    Град: <span th:text="${apiary.addressCity}">град</span><br/>
+                                                    Адрес: <span th:text="${apiary.addressStreet}">адрес</span><br/>
+                                                    Площ: <span th:text="${apiary.area}">площ</span> дка.<br/>
+                                                    Кошери: <span th:text="${beehives.size()}">кошери</span><br/>
+                                                </p>
+                                                <small class="text-muted"><span th:text="${apiary.description}">description</span></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="row">
                                 <div class="col">
                                     <h2>Кошери</h2>
                                 </div>
                                 <div class="col">
-                                    <a th:href="@{/beehives/add?apiary=} + ${apiary.id}" class="btn btn-primary">
+                                    <a th:href="@{/beehives/add?apiary=} + ${apiary.id}" class="btn btn-warning">
                                         <span>Добави кошер</span></a>
                                 </div>
                             </div>
@@ -169,6 +183,10 @@
                             </tr>
                             </thead>
                             <tbody>
+                            <tr th:if="${beehives.size() == 0}"><td colspan="6"><p class="card-title">Тук се намира информация за
+                                Кошерите
+                                в този пчелин. Можете да добавяте нови
+                                или да редактирате вече добавените.</p></td></tr>
                             <tr th:each="beehive: ${beehives}">
                                 <td><span th:text="${beehive.referenceNumber}">Номер</span></td>
                                 <td><a th:href="@{/beehives/view/} + ${beehive.id}"> <img th:src="${beehive.imageUrl}"

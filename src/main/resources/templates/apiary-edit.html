@@ -17,7 +17,8 @@
           th:action="@{/apiaries/edit/} + ${apiaryEditDTO.id}"
           th:method="put"
           th:object="${apiaryEditDTO}">
-        <small class="bg-danger text-light rounded" th:if="${usedAddress}">Вече има пчелин добавен на този адрес.</small>
+        <small class="bg-danger text-light rounded" th:if="${usedAddress}">Вече има пчелин добавен на този
+            адрес.</small>
         <div class="col-md-6">
             <label for="name" class="form-label">Име</label>
             <input type="text" class="form-control" id="name" th:field="*{name}" th:errorclass="is-invalid">
@@ -31,50 +32,57 @@
         </div>
         <div class="col-12">
             <label for="inputAddress" class="form-label">Адрес</label>
-            <input type="text" class="form-control" id="inputAddress" placeholder="ул.Пчеларска 3" th:field="*{addressStreet}" th:errorclass="is-invalid">
+            <input type="text" class="form-control" id="inputAddress" placeholder="ул.Пчеларска 3"
+                   th:field="*{addressStreet}" th:errorclass="is-invalid">
             <small class="bg-danger invalid-feedback text-light rounded">Невалиден адрес</small>
 
         </div>
         <div class="col-md-6">
             <label for="inputCity" class="form-label">Град</label>
             <input type="text" class="form-control" id="inputCity" th:field="*{addressCity}" th:errorclass="is-invalid">
-            <small class="bg-danger invalid-feedback text-light rounded">Градът трябва да съдържа поне 3 символа.</small>
+            <small class="bg-danger invalid-feedback text-light rounded">Градът трябва да съдържа поне 3
+                символа.</small>
 
         </div>
         <div class="col-md-4">
             <label for="inputCountry" class="form-label">Държава</label>
-            <input type="text" class="form-control" id="inputCountry" th:field="*{addressCountry}" th:errorclass="is-invalid">
-            <small class="bg-danger invalid-feedback text-light rounded">Държавата трябва да съдържа поне 3 символа.</small>
+            <input type="text" class="form-control" id="inputCountry" th:field="*{addressCountry}"
+                   th:errorclass="is-invalid">
+            <small class="bg-danger invalid-feedback text-light rounded">Държавата трябва да съдържа поне 3
+                символа.</small>
 
         </div>
         <div class="col-md-2">
             <label for="inputZip" class="form-label">ПК</label>
-            <input type="text" class="form-control" id="inputZip" th:field="*{addressPostcode}" th:errorclass="is-invalid">
+            <input type="text" class="form-control" id="inputZip" th:field="*{addressPostcode}"
+                   th:errorclass="is-invalid">
         </div>
-        <div class="col-12" >
+        <div class="col-12">
             <label for="inputAddress2" class="form-label">Допълнително описание</label>
-            <textarea class="form-control" id="inputAddress2" placeholder="Южно разположен, близо до слънчогледовата нива." rows="3" th:field="*{description}" th:errorclass="is-invalid"></textarea>
+            <textarea class="form-control" id="inputAddress2"
+                      placeholder="Южно разположен, близо до слънчогледовата нива." rows="3" th:field="*{description}"
+                      th:errorclass="is-invalid"></textarea>
         </div>
         <div class="mb-3" style="display:none">
             <label for="formFile" class="form-label">Снимка на пчелина</label>
             <input class="form-control" type="file" id="formFile">
         </div>
-        <div class="mb-3" >
+        <div class="mb-3">
             <label for="inputImg" class="form-label">Снимка на пчелина</label>
             <input class="form-control" type="text" id="inputImg" th:field="*{imageURL}" th:errorclass="is-invalid">
         </div>
+        <div class="row justify-content-center py-3">
+            <div class="col-4">
+                <button type="submit" class="btn btn-primary">Запази</button>
+            </div>
 
-        <div class="col-12">
-            <button type="submit" class="btn btn-primary">Запази</button>
-        </div>
-
-        <div class="col-12">
-            <a th:href="@{/apiaries/delete/} + ${apiaryEditDTO.id}"  class="btn btn-secondary">Изтриване</a>
+            <div class="col-4">
+                <a th:href="@{/apiaries/delete/} + ${apiaryEditDTO.id}" class="btn btn-secondary">Изтриване</a>
+            </div>
         </div>
     </form>
-</div>
 
-<div th:replace="fragments/footer">Footer</div>
+    <div th:replace="fragments/footer">Footer</div>
 
 </body>
 </html>

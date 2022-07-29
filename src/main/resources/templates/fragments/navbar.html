@@ -20,7 +20,7 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav nav-pills mr-auto col-12 justify-content-end">
-                <li class="nav-item" sec:authorize="isAuthenticated()">
+                <li class="nav-item" sec:authorize="isAuthenticated()" th:if="${!#httpServletRequest.requestURI.contains('/apiaries/view') && !#httpServletRequest.requestURI.contains('/beehives/add')}">
                     <a class="nav-link border border-warning" th:href="@{/beehives/add}">+ Добави кошер</a>
                 </li>
 
