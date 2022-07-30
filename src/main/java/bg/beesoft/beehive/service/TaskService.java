@@ -29,12 +29,12 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public TaskAddDTO initializeTask(Long id) {
-        return modelMapper.map(beehiveService.findById(id),TaskAddDTO.class);
+    public TaskAddDTO initializeTask(Long id,UserDetails userDetails) {
+        return modelMapper.map(beehiveService.findById(id,userDetails),TaskAddDTO.class);
     }
 
     public void addTask(TaskAddDTO taskAddDTO, Long id, UserDetails userDetails) {
-        BeehiveEntity beehiveEntity = beehiveService.findById(id);
+        BeehiveEntity beehiveEntity = beehiveService.findById(id,userDetails);
         beehiveEntity.setPower(taskAddDTO.getPower())
                 .setTemperament(taskAddDTO.getTemperament())
                 .getQueen()

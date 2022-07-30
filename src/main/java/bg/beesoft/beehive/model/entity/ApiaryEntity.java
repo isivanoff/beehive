@@ -24,7 +24,7 @@ public class ApiaryEntity extends BaseEntity{
     @ManyToOne(optional = false)
     private UserEntity beekeeper;
 
-    @OneToMany(mappedBy = "apiary")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "apiary")
     private List<BeehiveEntity> beehives;
 
     public String getName() {

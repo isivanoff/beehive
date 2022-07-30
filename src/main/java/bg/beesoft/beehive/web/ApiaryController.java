@@ -48,8 +48,8 @@ public class ApiaryController {
 
 
     @GetMapping("/all")
-    public String apiaries(Model model, Principal principal) {
-        model.addAttribute("apiaries", apiaryService.findAllApiaries(principal.getName()));
+    public String apiaries(Model model, @AuthenticationPrincipal UserDetails userDetails) {
+        model.addAttribute("apiaries", apiaryService.findAllApiaries(userDetails.getUsername()));
         return "apiaries";
     }
 
@@ -86,8 +86,8 @@ public class ApiaryController {
 
 
     @GetMapping("/edit/{id}")
-    public String edit(Model model, @PathVariable Long id) {
-        ApiaryEditDTO apiaryEditDTO = apiaryService.findById(id);
+    public String edit(Model model, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        ApiaryEditDTO apiaryEditDTO = apiaryService.findById(id,userDetails);
         model.addAttribute("apiaryEditDTO", apiaryEditDTO);
         return "apiary-edit";
     }
@@ -101,7 +101,7 @@ public class ApiaryController {
     @PutMapping("/edit/{id}")
     public String edit(@Valid ApiaryEditDTO apiaryEditDTO,
                        BindingResult bindingResult,
-                       RedirectAttributes redirectAttributes) {
+                       RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails userDetails) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("apiaryEditDTO", apiaryEditDTO);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.apiaryEditDTO", bindingResult);
@@ -118,15 +118,15 @@ public class ApiaryController {
 
         }
 
-        apiaryService.update(apiaryEditDTO, optionalAddress);
+        apiaryService.update(apiaryEditDTO, optionalAddress,userDetails);
 
 
         return "redirect:/apiaries/all";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
-        apiaryService.deleteById(id);
+    public String delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
+        apiaryService.deleteById(id,userDetails);
         return "redirect:/apiaries/all";
     }
 
@@ -137,9 +137,10 @@ public class ApiaryController {
                                sort = "referenceNumber",
                                direction = Sort.Direction.ASC,
                                page = 0,
-                               size = 10) Pageable pageable) {
-        ApiaryView apiary = apiaryService.findViewById(id);
-        Page<BeehiveView> beehives = beehiveService.findViewAllByApiaryId(id,pageable);
+                               size = 10) Pageable pageable,
+                       @AuthenticationPrincipal UserDetails userDetails) {
+        ApiaryView apiary = apiaryService.findViewById(id,userDetails);
+        Page<BeehiveView> beehives = beehiveService.findViewAllByApiaryId(id,pageable,userDetails);
 
         model.addAttribute("apiary", apiary);
         model.addAttribute("beehives", beehives);

@@ -101,23 +101,23 @@ public class BeehiveController {
     }
 
     @GetMapping("/view/{id}")
-    public String view(Model model, @PathVariable Long id) {
-        BeehiveFullView beehive = beehiveService.viewById(id);
+    public String view(Model model, @PathVariable Long id,@AuthenticationPrincipal UserDetails userDetails) {
+        BeehiveFullView beehive = beehiveService.viewById(id,userDetails);
         model.addAttribute("beehive", beehive);
         return "beehive-view";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable Long id) {
-        Long apiaryId = beehiveService.findApiaryIdByBeehiveId(id);
-        beehiveService.deleteById(id);
+    public String delete(@PathVariable Long id,@AuthenticationPrincipal UserDetails userDetails) {
+        Long apiaryId = beehiveService.findApiaryIdByBeehiveId(id,userDetails);
+        beehiveService.deleteById(id,userDetails);
         return "redirect:/apiaries/view/" + apiaryId;
     }
 
     @GetMapping("/edit/{id}")
     public String edit(Model model, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
         List<ApiaryView> apiaries = apiaryService.viewAllByBeekeperEmail(userDetails.getUsername());
-        BeehiveEditDTO beehiveEditDTO = beehiveService.getEditDTOById(id);
+        BeehiveEditDTO beehiveEditDTO = beehiveService.getEditDTOById(id,userDetails);
         beehiveEditDTO.setId(id);
 
         model.addAttribute("beehiveEditDTO",beehiveEditDTO);
@@ -157,7 +157,7 @@ public class BeehiveController {
             return "redirect:/beehives/edit/"  + id.toString() + "/error";
         }
 
-        beehiveService.updateBeehive(beehiveEditDTO);
+        beehiveService.updateBeehive(beehiveEditDTO,userDetails);
 
         return "redirect:/beehives/view/" + beehiveEditDTO.getId();
     }

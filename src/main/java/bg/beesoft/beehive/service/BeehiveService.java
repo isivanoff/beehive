@@ -6,16 +6,15 @@ import bg.beesoft.beehive.model.entity.ApiaryEntity;
 import bg.beesoft.beehive.model.entity.BeehiveEntity;
 import bg.beesoft.beehive.model.entity.QueenEntity;
 import bg.beesoft.beehive.model.entity.UserEntity;
+import bg.beesoft.beehive.model.exception.UnauthorizedRequestException;
 import bg.beesoft.beehive.model.view.BeehiveFullView;
 import bg.beesoft.beehive.model.view.BeehiveView;
 import bg.beesoft.beehive.repository.BeehiveRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BeehiveService {
@@ -56,31 +55,69 @@ public class BeehiveService {
         beehiveRepository.save(beehiveEntity);
     }
 
-    public Page<BeehiveView> findViewAllByApiaryId(Long apiaryId, Pageable pageable) {
-        return beehiveRepository.findByApiaryId(apiaryId,pageable)
+    public Page<BeehiveView> findViewAllByApiaryId(Long apiaryId, Pageable pageable, UserDetails userDetails) {
+        Page<BeehiveView> beehiveViews = beehiveRepository.findByApiaryId(apiaryId, pageable)
                 .map(b -> modelMapper.map(b, BeehiveView.class));
+
+        if (!apiaryService.findById(apiaryId).getBeekeeper().getEmail().equals(userDetails.getUsername())) {
+            throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
+        }
+
+        return beehiveViews;
     }
 
-    public BeehiveFullView viewById(Long id) {
-        return modelMapper.map(beehiveRepository.findById(id), BeehiveFullView.class);
+    public BeehiveFullView viewById(Long id, UserDetails userDetails) {
+        BeehiveEntity beehiveEntity = beehiveRepository.findById(id).orElseThrow();
+
+        if (!beehiveEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())) {
+            throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
+        }
+
+        return modelMapper.map(beehiveEntity, BeehiveFullView.class);
     }
 
-    public void deleteById(Long id) {
+    public void deleteById(Long id, UserDetails userDetails) {
+
+
+        BeehiveEntity beehiveEntity = beehiveRepository.findById(id).orElseThrow();
+
+        if (!beehiveEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())) {
+            throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
+        }
+
         beehiveRepository.deleteById(id);
     }
 
-    public Long findApiaryIdByBeehiveId(Long id) {
-        return beehiveRepository.findById(id).orElseThrow().getApiary().getId();
+    public Long findApiaryIdByBeehiveId(Long id, UserDetails userDetails) {
+        BeehiveEntity beehiveEntity = beehiveRepository.findById(id).orElseThrow();
+
+        if (!beehiveEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())) {
+            throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
+        }
+
+        return beehiveEntity.getApiary().getId();
+
     }
 
-    public BeehiveEditDTO getEditDTOById(Long id) {
-        return modelMapper.map(beehiveRepository.findById(id), BeehiveEditDTO.class);
+    public BeehiveEditDTO getEditDTOById(Long id, UserDetails userDetails) {
+        BeehiveEntity beehiveEntity = beehiveRepository.findById(id).orElseThrow();
+
+        if (!beehiveEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())) {
+            throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
+        }
+
+        return modelMapper.map(beehiveEntity, BeehiveEditDTO.class);
     }
 
-    public void updateBeehive(BeehiveEditDTO beehiveEditDTO) {
+    public void updateBeehive(BeehiveEditDTO beehiveEditDTO, UserDetails userDetails) {
+        BeehiveEntity beehiveEntity = beehiveRepository.findById(beehiveEditDTO.getId()).orElseThrow();
+
+        if (!beehiveEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())) {
+            throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
+        }
+
         ApiaryEntity apiaryEntity = apiaryService.getById(beehiveEditDTO.getApiaryId());
 
-        BeehiveEntity beehiveEntity = beehiveRepository.findById(beehiveEditDTO.getId()).orElseThrow();
 
         beehiveEntity.setAlive(beehiveEditDTO.isAlive()).
                 setImageUrl(beehiveEditDTO.getImageUrl()).
@@ -98,8 +135,13 @@ public class BeehiveService {
         beehiveRepository.save(beehiveEntity);
     }
 
-    public BeehiveEntity findById(Long id) {
-        return beehiveRepository.findById(id).orElseThrow();
+    public BeehiveEntity findById(Long id, UserDetails userDetails) {
+        BeehiveEntity beehiveEntity = beehiveRepository.findById(id).orElseThrow();
+
+        if (!beehiveEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())) {
+            throw new UnauthorizedRequestException("Нямате достъп до този кошер.");
+        }
+        return beehiveEntity;
     }
 
     public void save(BeehiveEntity beehiveEntity) {

@@ -23,8 +23,8 @@ public class TaskController {
     }
 
     @ModelAttribute("taskAddDTO")
-    public TaskAddDTO initModel(@PathVariable Long id){
-        TaskAddDTO taskAddDTO = taskService.initializeTask(id);
+    public TaskAddDTO initModel(@PathVariable Long id,@AuthenticationPrincipal UserDetails userDetails){
+        TaskAddDTO taskAddDTO = taskService.initializeTask(id,userDetails);
         return taskAddDTO;
     }
 
