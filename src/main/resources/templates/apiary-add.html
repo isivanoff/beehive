@@ -17,34 +17,34 @@
         th:action="@{/apiaries/add}"
         th:method="post"
         th:object="${apiaryAddDTO}">
-    <small class="bg-danger text-light rounded" th:if="${usedAddress}">Вече има пчелин добавен на този адрес.</small>
+    <p class="errors alert alert-danger" th:if="${usedAddress}">Вече има пчелин добавен на този адрес.</p>
     <div class="col-md-6">
       <label for="name" class="form-label">Име</label>
       <input type="text" class="form-control" id="name" th:field="*{name}" th:errorclass="is-invalid">
-      <small class="bg-danger invalid-feedback text-light rounded">Името трябва да съдържа поне 3 символа</small>
+      <p class="errors alert alert-danger invalid-feedback">Името трябва да съдържа поне 3 символа</p>
     </div>
     <div class="col-md-6">
       <label for="area" class="form-label">Площ (дка.)</label>
       <input type="number" class="form-control" id="area" th:field="*{area}" th:errorclass="is-invalid">
-      <small class="bg-danger invalid-feedback text-light rounded">Невалидна площ.</small>
+      <p class="errors alert alert-danger invalid-feedback">Невалидна площ.</p>
 
     </div>
     <div class="col-12">
       <label for="inputAddress" class="form-label">Адрес</label>
       <input type="text" class="form-control" id="inputAddress" placeholder="ул.Пчеларска 3" th:field="*{street}" th:errorclass="is-invalid">
-      <small class="bg-danger invalid-feedback text-light rounded">Невалиден адрес</small>
+      <p class="errors alert alert-danger invalid-feedback">Невалиден адрес</p>
 
     </div>
     <div class="col-md-6">
       <label for="inputCity" class="form-label">Град</label>
       <input type="text" class="form-control" id="inputCity" th:field="*{city}" th:errorclass="is-invalid">
-      <small class="bg-danger invalid-feedback text-light rounded">Градът трябва да съдържа поне 3 символа.</small>
+      <p class="errors alert alert-danger invalid-feedback">Градът трябва да съдържа поне 3 символа.</p>
 
     </div>
     <div class="col-md-4">
       <label for="inputCountry" class="form-label">Държава</label>
       <input type="text" class="form-control" id="inputCountry" th:field="*{country}" th:errorclass="is-invalid">
-      <small class="bg-danger invalid-feedback text-light rounded">Държавата трябва да съдържа поне 3 символа.</small>
+      <p class="errors alert alert-danger invalid-feedback">Държавата трябва да съдържа поне 3 символа.</p>
 
     </div>
     <div class="col-md-2">

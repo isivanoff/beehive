@@ -145,6 +145,11 @@
                        th:text="${e}">Темперамент</label>
             </div>
         </div>
+
+        <p th:if="${invalidTemperament}" class="errors alert alert-danger">
+            Моля изберете темперамента на кошера.
+        </p>
+
         <div class="row justify-content-center">
             <button  class="btn btn-warning col-4 mx-3"     onclick="window.history.go(-1); return false;"
                      role="button">Отказ</button>

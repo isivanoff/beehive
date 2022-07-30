@@ -131,19 +131,25 @@
         </div>
         <div class="form-group col-8">
             <input name="power" type="range" class="form-range" min="1" max="100" step="1"
-                   th:value="*{power} == 0 ? 50:*{power}" id="power">
-
+                   th:value="*{power} == 0 ? 50:*{power}" th:errorclass="is-invalid" id="power">
+            <p class="invalid-feedback errors alert alert-danger">
+                Моля изберете темперамента на кошера.
+            </p>
         </div>
 
         <div class="form-group d-flex justify-content-between">
             <label class="text-white p-2">Темперамент</label>
             <div
                     th:each="e : ${T(bg.beesoft.beehive.model.entity.enums.TemperamentEnum).values()}">
-                <input type="radio" th:field="*{temperament}" th:value="${e}" class="btn-check" name="options">
+                <input type="radio" th:field="*{temperament}" th:errorclass="is-invalid" th:value="${e}" class="btn-check" name="options">
                 <label class="btn p-2 m-2" th:classappend="${e}" th:for="${#ids.prev('temperament')}"
                        th:text="${e}">Темперамент</label>
             </div>
+
         </div>
+        <p th:if="${invalidTemperament}" class="errors alert alert-danger">
+            Моля изберете темперамента на кошера.
+        </p>
 <div class="row justify-content-center">
         <button  class="btn btn-warning col-4 mx-3"     onclick="window.history.go(-1); return false;"
                  role="button">Отказ</button>

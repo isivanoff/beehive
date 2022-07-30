@@ -74,6 +74,7 @@ public class BeehiveController {
             redirectAttributes.addFlashAttribute("beehiveAddDTO", beehiveAddDTO);
             redirectAttributes.addFlashAttribute("apiaries", apiaries);
             redirectAttributes.addFlashAttribute("hasApiary", hasApiary);
+            redirectAttributes.addFlashAttribute("invalidTemperament", beehiveAddDTO.getTemperament() == null);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.beehiveAddDTO", bindingResult);
             return "redirect:/beehives/add/error" + (hasApiary ? "?apiary=" + apiary.get().toString() : "");
         }
@@ -85,6 +86,8 @@ public class BeehiveController {
             redirectAttributes.addFlashAttribute("apiaries", apiaries);
             redirectAttributes.addFlashAttribute("hasApiary", hasApiary);
             redirectAttributes.addFlashAttribute("numberIsTaken", true);
+            redirectAttributes.addFlashAttribute("invalidTemperament", beehiveAddDTO.getTemperament() == null);
+
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.beehiveAddDTO", bindingResult);
             return "redirect:/beehives/add/error" + (apiary.isPresent() ? "?apiary=" + beehiveAddDTO.getApiaryId().toString() : "");
         }
@@ -135,6 +138,8 @@ public class BeehiveController {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("beehiveEditDTO", beehiveEditDTO);
             redirectAttributes.addFlashAttribute("apiaries", apiaries);
+            redirectAttributes.addFlashAttribute("invalidTemperament", beehiveEditDTO.getTemperament() == null);
+
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.beehiveEditDTO", bindingResult);
             return "redirect:/beehives/edit/" + id.toString() + "/error";
         }
@@ -145,6 +150,8 @@ public class BeehiveController {
         if (numberIsTaken && idByReferenceNumber != beehiveEditDTO.getId()) {
             redirectAttributes.addFlashAttribute("beehiveEditDTO", beehiveEditDTO);
             redirectAttributes.addFlashAttribute("apiaries", apiaries);
+            redirectAttributes.addFlashAttribute("invalidTemperament", beehiveEditDTO.getTemperament() == null);
+
             redirectAttributes.addFlashAttribute("numberIsTaken", true);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.beehiveEditDTO", bindingResult);
             return "redirect:/beehives/edit/"  + id.toString() + "/error";
