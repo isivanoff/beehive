@@ -7,6 +7,8 @@ import bg.beesoft.beehive.model.view.TaskFullView;
 import bg.beesoft.beehive.model.view.TaskView;
 import bg.beesoft.beehive.repository.TaskRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -47,12 +49,9 @@ public class TaskService {
         taskRepository.save(taskEntity);
     }
 
-    public List<TaskView> findAllByBeehiveId(Long beehiveId) {
-        return taskRepository.findAllByBeehiveId(beehiveId)
-                .stream()
-                .map(t->modelMapper.map(t,TaskView.class))
-                .sorted((a,b)->b.getDate().compareTo(a.getDate()))
-                .collect(Collectors.toList());
+    public Page<TaskView> findAllByBeehiveId(Long beehiveId, Pageable pageable) {
+        return taskRepository.findAllByBeehiveId(beehiveId,pageable)
+                .map(t->modelMapper.map(t,TaskView.class));
     }
 
     public TaskFullView findViewById(Long taskId) {

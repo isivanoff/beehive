@@ -4,15 +4,19 @@ $(document).ready(function () {
 });
 
 
-function getTasks(beehiveId) {
-    fetch(`http://localhost:8080/api/${beehiveId}/tasks`, {
+function getTasks(beehiveId, page = 0) {
+    $("#tasks").html("");
+    $("#loading").tmpl().appendTo('#tasks');
+
+    fetch(`http://localhost:8080/api/${beehiveId}/tasks?page=${page}`, {
         headers: {
             "Accept": "application/json"
         }
     }).then(res => res.json())
         .then(data => {
             $("#tasks").html("");
-            showTasks(data);
+            showTasks(data.content);
+            updateNav(data, beehiveId);
         });
 }
 
@@ -20,6 +24,46 @@ function showTasks(data) {
     for (const task of data) {
         $("#taskTemplate").tmpl(task).appendTo("#tasks");
     }
+
+}
+
+function updateNav(data, beehiveId) {
+    $("#firstPage").off("click");
+    $("#prevPage").off("click");
+    $("#curPage").off("click");
+    $("#nextPage").off("click");
+    $("#lastPage").off("click");
+
+    $("#firstPage").on("click", function () {
+        getTasks(beehiveId);
+    });
+
+    if (data.pageable.pageNumber == 0) {
+        $("#prevPage").closest("nav").hide();
+    } else {
+        $("#prevPage").closest("nav").show();
+        $("#prevPage").text(data.pageable.pageNumber);
+        $("#prevPage").on("click", function () {
+            getTasks(beehiveId, data.pageable.pageNumber - 1);
+        });
+    }
+
+    $("#curPage").text(data.pageable.pageNumber + 1)
+
+
+    if (data.pageable.pageNumber >= data.totalPages - 1) {
+        $("#nextPage").closest("nav").hide();
+    } else {
+        $("#nextPage").closest("nav").show();
+        $("#nextPage").text(data.pageable.pageNumber + 2);
+        $("#nextPage").on("click", function () {
+            getTasks(beehiveId, data.pageable.pageNumber + 1);
+        });
+    }
+
+    $("#lastPage").on("click", function () {
+        getTasks(beehiveId, data.totalPages - 1);
+    });
 
 }
 
@@ -74,9 +118,9 @@ function deleteTask(taskId) {
         .catch(error => console.log('error', error));
 }
 
-function updateModalDelete(taskId){
-$ ("#deleteTaskModalButton").off("click");
-    $ ("#deleteTaskModalButton").on("click",function(ev){
+function updateModalDelete(taskId) {
+    $("#deleteTaskModalButton").off("click");
+    $("#deleteTaskModalButton").on("click", function (ev) {
         deleteTask(taskId);
     });
 }
