@@ -48,6 +48,7 @@ public class BeehiveAddDTO {
     @Positive
     private Long apiaryId;
 
+    @NotNull
     private TemperamentEnum temperament;
 
     public BeehiveAddDTO() {

@@ -130,6 +130,7 @@
 
 
 
+
             </style>
 
             </head>
@@ -152,7 +153,7 @@
                                                     Град: <span th:text="${apiary.addressCity}">град</span><br/>
                                                     Адрес: <span th:text="${apiary.addressStreet}">адрес</span><br/>
                                                     Площ: <span th:text="${apiary.area}">площ</span> дка.<br/>
-                                                    Кошери: <span th:text="${beehives.size()}">кошери</span><br/>
+                                                    Кошери: <span th:text="${beehives.getSize()}">кошери</span><br/>
                                                 </p>
                                                 <small class="text-muted"><span th:text="${apiary.description}">description</span></small>
                                             </div>
@@ -183,10 +184,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:if="${beehives.size() == 0}"><td colspan="6"><p class="card-title">Тук се намира информация за
-                                Кошерите
-                                в този пчелин. Можете да добавяте нови
-                                или да редактирате вече добавените.</p></td></tr>
+                            <tr th:if="${beehives.getSize() == 0}">
+                                <td colspan="6"><p class="card-title">Тук се намира информация за
+                                    Кошерите
+                                    в този пчелин. Можете да добавяте нови
+                                    или да редактирате вече добавените.</p></td>
+                            </tr>
                             <tr th:each="beehive: ${beehives}">
                                 <td><span th:text="${beehive.referenceNumber}">Номер</span></td>
                                 <td><a th:href="@{/beehives/view/} + ${beehive.id}"> <img th:src="${beehive.imageUrl}"
@@ -217,7 +220,63 @@
 
                             </tbody>
                         </table>
+                        <div class="container-fluid container-fluid d-inline-flex justify-content-center">
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item" th:classappend="${beehives.isFirst()} ? 'disabled' : ''">
+                                        <a th:unless="${beehives.isFirst()}"
+                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=0)}"
+                                           class="page-link" href="#">Първа</a>
+                                        <a th:if="${beehives.isFirst()}"
+                                           class="page-link" href="#">Първа</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item" th:classappend="${beehives.hasPrevious() ? '' : 'disabled'}">
+                                        <a th:if="${beehives.hasPrevious()}"
+                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getNumber() - 1})}"
+                                           class="page-link" href="#" th:text="${beehives.getNumber() }">Назад</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item active">
+                                        <a
+                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getNumber()})}"
+                                           class="page-link" href="#" th:text="${beehives.getNumber() +1}">Текуща</a>
+
+                                    </li>
+                                </ul>
+                            </nav>
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item" th:classappend="${beehives.hasNext() ? '' : 'disabled'}">
+                                        <a th:if="${beehives.hasNext()}"
+                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getNumber() + 1})}"
+                                           class="page-link" href="#" th:text="${beehives.getNumber() + 2}">Напред</a>
+
+                                    </li>
+                                </ul>
+                            </nav>
+                            <nav>
+                                <ul class="pagination">
+                                    <li class="page-item" th:classappend="${beehives.isLast()} ? 'disabled' : ''">
+                                        <a th:unless="${beehives.isLast()}"
+                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getTotalPages() - 1})}"
+                                           class="page-link" href="#">Последна</a>
+                                        <a th:if="${beehives.isLast()}"
+                                           class="page-link" href="#">Последна</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+
                     </div>
+
+
                 </div>
             </div>
             </body>

@@ -10,6 +10,8 @@ import bg.beesoft.beehive.model.view.BeehiveFullView;
 import bg.beesoft.beehive.model.view.BeehiveView;
 import bg.beesoft.beehive.repository.BeehiveRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -54,11 +56,9 @@ public class BeehiveService {
         beehiveRepository.save(beehiveEntity);
     }
 
-    public List<BeehiveView> findViewAllByApiaryId(Long id) {
-        return beehiveRepository.findByApiaryId(id)
-                .stream()
-                .map(b -> modelMapper.map(b, BeehiveView.class))
-                .collect(Collectors.toList());
+    public Page<BeehiveView> findViewAllByApiaryId(Long apiaryId, Pageable pageable) {
+        return beehiveRepository.findByApiaryId(apiaryId,pageable)
+                .map(b -> modelMapper.map(b, BeehiveView.class));
     }
 
     public BeehiveFullView viewById(Long id) {

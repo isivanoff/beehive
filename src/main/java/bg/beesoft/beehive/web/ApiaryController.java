@@ -9,6 +9,10 @@ import bg.beesoft.beehive.service.AddressService;
 import bg.beesoft.beehive.service.ApiaryService;
 import bg.beesoft.beehive.service.BeehiveService;
 import bg.beesoft.beehive.service.UserService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -128,9 +132,14 @@ public class ApiaryController {
 
 
     @GetMapping("/view/{id}")
-    public String view(Model model, @PathVariable Long id) {
+    public String view(Model model, @PathVariable Long id,
+                       @PageableDefault(
+                               sort = "referenceNumber",
+                               direction = Sort.Direction.ASC,
+                               page = 0,
+                               size = 10) Pageable pageable) {
         ApiaryView apiary = apiaryService.findViewById(id);
-        List<BeehiveView> beehives = beehiveService.findViewAllByApiaryId(id);
+        Page<BeehiveView> beehives = beehiveService.findViewAllByApiaryId(id,pageable);
 
         model.addAttribute("apiary", apiary);
         model.addAttribute("beehives", beehives);
