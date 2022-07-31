@@ -8,13 +8,12 @@ import bg.beesoft.beehive.model.entity.BeehiveEntity;
 import bg.beesoft.beehive.model.entity.UserEntity;
 import bg.beesoft.beehive.model.exception.UnauthorizedRequestException;
 import bg.beesoft.beehive.model.view.ApiaryView;
-import bg.beesoft.beehive.model.view.BeehiveView;
 import bg.beesoft.beehive.repository.ApiaryRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,23 +66,23 @@ public class ApiaryService {
                 .collect(Collectors.toList());
 
 
-    return apiaryViews;
+        return apiaryViews;
     }
 
-    public ApiaryEditDTO findById(Long id,UserDetails userDetails) {
+    public ApiaryEditDTO findById(Long id, UserDetails userDetails) {
         ApiaryEntity apiaryEntity = apiaryRepository.findById(id).orElseThrow();
 
-        if (!apiaryEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())){
+        if (!apiaryEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())) {
             throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
         }
 
-        return  modelMapper.map(apiaryEntity, ApiaryEditDTO.class);
+        return modelMapper.map(apiaryEntity, ApiaryEditDTO.class);
     }
 
-    public void update(ApiaryEditDTO apiaryEditDTO, Optional<AddressEntity> optionalAddress,UserDetails userDetails) {
+    public void update(ApiaryEditDTO apiaryEditDTO, Optional<AddressEntity> optionalAddress, UserDetails userDetails) {
         ApiaryEntity apiaryEntity = apiaryRepository.findById(apiaryEditDTO.getId()).orElseThrow();
 
-        if (!apiaryEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())){
+        if (!apiaryEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())) {
             throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
         }
 
@@ -110,11 +109,11 @@ public class ApiaryService {
     }
 
     public Long findApiaryAddressId(Long id) {
-        return apiaryRepository.findById(id).get().getAddress().getId();
+        return apiaryRepository.findById(id).orElseThrow().getAddress().getId();
     }
 
-    public void deleteById(Long id, UserDetails userDetails) {
-        if (!apiaryRepository.findById(id).orElseThrow().getBeekeeper().getEmail().equals(userDetails.getUsername())){
+    public void deleteById(Long id, String username) {
+        if (!apiaryRepository.findById(id).orElseThrow().getBeekeeper().getEmail().equals(username)) {
             throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
         }
         apiaryRepository.deleteById(id);
@@ -146,7 +145,7 @@ public class ApiaryService {
     }
 
     public ApiaryView findViewById(Long id, UserDetails userDetails) {
-        return modelMapper.map(findById(id,userDetails), ApiaryView.class);
+        return modelMapper.map(findById(id, userDetails), ApiaryView.class);
     }
 
     public Long findIdByReferenceNumberInApiary(Long apiaryId, int referenceNumber) {
@@ -158,6 +157,11 @@ public class ApiaryService {
     }
 
     public ApiaryEntity findById(Long apiaryId) {
-    return apiaryRepository.findById(apiaryId).orElseThrow();
+        return apiaryRepository.findById(apiaryId).orElseThrow();
+    }
+
+    @Transactional
+    public void deleteAllApiaries(String username) {
+        apiaryRepository.deleteAllByBeekeeperEmail(username);
     }
 }

@@ -126,7 +126,7 @@ public class ApiaryController {
 
     @GetMapping("/delete/{id}")
     public String delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        apiaryService.deleteById(id,userDetails);
+        apiaryService.deleteById(id,userDetails.getUsername());
         return "redirect:/apiaries/all";
     }
 

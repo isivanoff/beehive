@@ -109,8 +109,8 @@ public class BeehiveService {
         return modelMapper.map(beehiveEntity, BeehiveEditDTO.class);
     }
 
-    public void updateBeehive(BeehiveEditDTO beehiveEditDTO, UserDetails userDetails) {
-        BeehiveEntity beehiveEntity = beehiveRepository.findById(beehiveEditDTO.getId()).orElseThrow();
+    public void updateBeehive(BeehiveEditDTO beehiveEditDTO, UserDetails userDetails, Long id) {
+        BeehiveEntity beehiveEntity = beehiveRepository.findById(id).orElseThrow();
 
         if (!beehiveEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())) {
             throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");

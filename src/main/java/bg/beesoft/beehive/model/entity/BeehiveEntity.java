@@ -41,7 +41,7 @@ public class BeehiveEntity extends BaseEntity {
     @ManyToOne
     private UserEntity beekeeper;
 
-    @OneToMany(mappedBy = "beehive")
+    @OneToMany(mappedBy = "beehive",cascade = CascadeType.ALL)
     private List<TaskEntity> tasks;
 
     public int getReferenceNumber() {

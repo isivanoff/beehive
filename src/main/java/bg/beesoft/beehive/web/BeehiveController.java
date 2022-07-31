@@ -133,6 +133,8 @@ public class BeehiveController {
 
     @PostMapping("/edit/{id}")
     public String edit(@PathVariable Long id, @Valid BeehiveEditDTO beehiveEditDTO,BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails userDetails){
+
+
         List<ApiaryView> apiaries = apiaryService.viewAllByBeekeperEmail(userDetails.getUsername());
 
         if (bindingResult.hasErrors()) {
@@ -157,7 +159,7 @@ public class BeehiveController {
             return "redirect:/beehives/edit/"  + id.toString() + "/error";
         }
 
-        beehiveService.updateBeehive(beehiveEditDTO,userDetails);
+        beehiveService.updateBeehive(beehiveEditDTO,userDetails,id);
 
         return "redirect:/beehives/view/" + beehiveEditDTO.getId();
     }

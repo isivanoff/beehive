@@ -2,6 +2,7 @@ package bg.beesoft.beehive.web;
 
 import bg.beesoft.beehive.model.dto.ChangePasswordDTO;
 import bg.beesoft.beehive.model.dto.UserEditDTO;
+import bg.beesoft.beehive.service.ApiaryService;
 import bg.beesoft.beehive.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,10 +21,12 @@ public class UserController {
 
     private UserService userService;
     private PasswordEncoder passwordEncoder;
+    private ApiaryService apiaryService;
 
-    public UserController(UserService userService, PasswordEncoder passwordEncoder) {
+    public UserController(UserService userService, PasswordEncoder passwordEncoder, ApiaryService apiaryService) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.apiaryService = apiaryService;
     }
 
     @ModelAttribute("changePasswordDTO")
@@ -75,7 +78,7 @@ public class UserController {
 
     @GetMapping("/delete")
     public String delete(@AuthenticationPrincipal UserDetails userDetails) {
-
+        apiaryService.deleteAllApiaries(userDetails.getUsername());
         userService.deleteByEmail(userDetails.getUsername());
 
         return "redirect:/";

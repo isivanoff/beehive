@@ -9,7 +9,6 @@ import bg.beesoft.beehive.repository.UserRepository;
 import bg.beesoft.beehive.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,11 +17,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolationException;
-import java.sql.SQLException;
-import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -100,6 +95,7 @@ public class UserService {
                         setEmail(userRegisterDTO.getEmail()).
                         setFirstName(userRegisterDTO.getFirstName()).
                         setLastName(userRegisterDTO.getLastName()).
+                        setActive(true).
                         setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
 
             userRepository.save(newUser);
@@ -149,6 +145,7 @@ public class UserService {
     public void updatePassword(String email,String newPassword) {
         UserEntity userEntity = userRepository.findByEmail(email).orElseThrow();
         userEntity.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(userEntity);
         updateAuthentication(userEntity);
     }
 
