@@ -40,7 +40,8 @@ public class AppUserDetailsService implements UserDetailsService {
                         getUserRoles().
                         stream().
                         map(this::map).
-                        toList()
+                        toList(),
+                userEntity.isBanned()
         );
 
     }

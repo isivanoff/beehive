@@ -6,6 +6,7 @@ import bg.beesoft.beehive.model.entity.UserEntity;
 import bg.beesoft.beehive.model.entity.UserRoleEntity;
 import bg.beesoft.beehive.model.entity.enums.UserRoleEnum;
 import bg.beesoft.beehive.model.exception.NotFoundException;
+import bg.beesoft.beehive.model.view.UserAdminView;
 import bg.beesoft.beehive.repository.UserRepository;
 import bg.beesoft.beehive.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements ApplicationListener<AuthenticationSuccessEvent> {
@@ -178,10 +180,17 @@ public class UserService implements ApplicationListener<AuthenticationSuccessEve
         userRepository.findAll().
                 forEach(user -> {
                     long months = ChronoUnit.MONTHS.between(user.getLastLoggedIn(), current_timestamp);
-                    if (months > 3 && user.isActive()) {
+                    if (months > 3 && user.isActive() && !user.getUserRoles().contains(UserRoleEnum.ADMIN)) {
                         user.setActive(false);
                         userRepository.save(user);
                     }
                 });
+    }
+
+    public List<UserAdminView> findAllUsersAdminView() {
+        return userRepository.findAll()
+                .stream()
+                .map(user->modelMapper.map(user,UserAdminView.class))
+                .collect(Collectors.toList());
     }
 }

@@ -15,7 +15,7 @@ public class BeehiveUserDetails implements UserDetails {
     private final String lastName;
     private final boolean enabled;
     private final Collection<GrantedAuthority> authorities;
-
+    private final boolean isBanned;
 
 
     public BeehiveUserDetails(String password,
@@ -23,13 +23,15 @@ public class BeehiveUserDetails implements UserDetails {
                               String firstName,
                               String lastName,
                               boolean enabled,
-                              Collection<GrantedAuthority> authorities) {
+                              Collection<GrantedAuthority> authorities,
+                              boolean isBanned) {
         this.password = password;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.authorities = authorities;
         this.enabled = enabled;
+        this.isBanned=isBanned;
     }
 
     public String getFirstName() {
@@ -47,7 +49,7 @@ public class BeehiveUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
@@ -67,7 +69,7 @@ public class BeehiveUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !isBanned;
     }
 
     @Override
