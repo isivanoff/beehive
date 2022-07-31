@@ -6,6 +6,7 @@ import bg.beesoft.beehive.model.entity.AddressEntity;
 import bg.beesoft.beehive.model.entity.ApiaryEntity;
 import bg.beesoft.beehive.model.entity.BeehiveEntity;
 import bg.beesoft.beehive.model.entity.UserEntity;
+import bg.beesoft.beehive.model.exception.NotFoundException;
 import bg.beesoft.beehive.model.exception.UnauthorizedRequestException;
 import bg.beesoft.beehive.model.view.ApiaryView;
 import bg.beesoft.beehive.repository.ApiaryRepository;
@@ -70,7 +71,7 @@ public class ApiaryService {
     }
 
     public ApiaryEditDTO findById(Long id, UserDetails userDetails) {
-        ApiaryEntity apiaryEntity = apiaryRepository.findById(id).orElseThrow();
+        ApiaryEntity apiaryEntity = findById(id);
 
         if (!apiaryEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())) {
             throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
@@ -80,7 +81,7 @@ public class ApiaryService {
     }
 
     public void update(ApiaryEditDTO apiaryEditDTO, Optional<AddressEntity> optionalAddress, UserDetails userDetails) {
-        ApiaryEntity apiaryEntity = apiaryRepository.findById(apiaryEditDTO.getId()).orElseThrow();
+        ApiaryEntity apiaryEntity = findById(apiaryEditDTO.getId());
 
         if (!apiaryEntity.getBeekeeper().getEmail().equals(userDetails.getUsername())) {
             throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
@@ -109,11 +110,11 @@ public class ApiaryService {
     }
 
     public Long findApiaryAddressId(Long id) {
-        return apiaryRepository.findById(id).orElseThrow().getAddress().getId();
+        return findById(id).getAddress().getId();
     }
 
     public void deleteById(Long id, String username) {
-        if (!apiaryRepository.findById(id).orElseThrow().getBeekeeper().getEmail().equals(username)) {
+        if (!findById(id).getBeekeeper().getEmail().equals(username)) {
             throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
         }
         apiaryRepository.deleteById(id);
@@ -127,17 +128,12 @@ public class ApiaryService {
     }
 
     public boolean apiaryAlreadyHasBeehiveNumber(Long apiaryId, int referenceNumber) {
-        return apiaryRepository.findById(apiaryId).
-                orElseThrow().
+        return findById(apiaryId).
                 getBeehives().
                 stream().
                 map(BeehiveEntity::getReferenceNumber).
                 collect(Collectors.toList()).
                 contains(referenceNumber);
-    }
-
-    public ApiaryEntity getById(Long apiaryId) {
-        return apiaryRepository.findById(apiaryId).orElseThrow();
     }
 
     public void saveApiary(ApiaryEntity apiaryEntity) {
@@ -149,19 +145,24 @@ public class ApiaryService {
     }
 
     public Long findIdByReferenceNumberInApiary(Long apiaryId, int referenceNumber) {
-        return apiaryRepository.
-                findById(apiaryId).orElseThrow().
+        return findById(apiaryId).
                 getBeehives().stream().
                 filter(b -> b.getReferenceNumber() == referenceNumber)
-                .map(b -> b.getId()).findFirst().orElse(null);
+                .map(b -> b.getId()).findFirst().orElseThrow(() -> new NotFoundException("Кошерът не е намерен."));
     }
 
     public ApiaryEntity findById(Long apiaryId) {
-        return apiaryRepository.findById(apiaryId).orElseThrow();
+        return apiaryRepository.findById(apiaryId).orElseThrow(() -> new NotFoundException("Пчелинът не е намерен."));
     }
 
     @Transactional
     public void deleteAllApiaries(String username) {
         apiaryRepository.deleteAllByBeekeeperEmail(username);
+    }
+
+    public void checkApiary(Long apiaryId, UserDetails userDetails) {
+        if (!apiaryRepository.findById(apiaryId).equals(userDetails.getUsername())){
+            throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
+        }
     }
 }

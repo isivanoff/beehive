@@ -2,6 +2,7 @@ package bg.beesoft.beehive.web;
 
 import bg.beesoft.beehive.model.dto.BeehiveAddDTO;
 import bg.beesoft.beehive.model.dto.BeehiveEditDTO;
+import bg.beesoft.beehive.model.entity.ApiaryEntity;
 import bg.beesoft.beehive.model.view.ApiaryView;
 import bg.beesoft.beehive.model.view.BeehiveFullView;
 import bg.beesoft.beehive.service.ApiaryService;
@@ -44,6 +45,10 @@ public class BeehiveController {
     public String add(Model model, @AuthenticationPrincipal UserDetails userDetails, @RequestParam Optional<Long> apiary, BeehiveAddDTO beehiveAddDTO) {
         boolean hasApiary = apiary.isPresent();
 
+        if(hasApiary){
+            apiaryService.checkApiary(apiary.get(),userDetails);
+        }
+
         List<ApiaryView> apiaries = apiaryService.viewAllByBeekeperEmail(userDetails.getUsername());
         model.addAttribute("apiaries", apiaries);
         model.addAttribute("hasApiary", hasApiary);
@@ -69,6 +74,10 @@ public class BeehiveController {
         List<ApiaryView> apiaries = apiaryService.viewAllByBeekeperEmail(userDetails.getUsername());
 
         boolean hasApiary = apiary.isPresent();
+
+        if(hasApiary){
+            apiaryService.checkApiary(apiary.get(),userDetails);
+        }
 
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("beehiveAddDTO", beehiveAddDTO);

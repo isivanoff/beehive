@@ -5,6 +5,7 @@ import bg.beesoft.beehive.model.dto.UserRegisterDTO;
 import bg.beesoft.beehive.model.entity.UserEntity;
 import bg.beesoft.beehive.model.entity.UserRoleEntity;
 import bg.beesoft.beehive.model.entity.enums.UserRoleEnum;
+import bg.beesoft.beehive.model.exception.NotFoundException;
 import bg.beesoft.beehive.repository.UserRepository;
 import bg.beesoft.beehive.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
@@ -120,16 +121,15 @@ public class UserService {
     }
 
     public UserEntity findByEmail(String name) {
-        return userRepository.findByEmail(name).orElseThrow();
+        return userRepository.findByEmail(name).orElseThrow(() -> new NotFoundException("Невалиден акаунт.") );
     }
 
     public UserEditDTO getEditDetails(String username) {
-        return modelMapper.map(userRepository.findByEmail(username).orElse(null), UserEditDTO.class);
+        return modelMapper.map(findByEmail(username), UserEditDTO.class);
     }
 
     public void update(UserEditDTO userEditDTO) {
-
-        UserEntity newUser = userRepository.findByEmail(userEditDTO.getEmail()).orElse(null)
+        UserEntity newUser = findByEmail(userEditDTO.getEmail())
                 .setFirstName(userEditDTO.getFirstName())
                 .setLastName(userEditDTO.getLastName())
                 .setImageUrl(userEditDTO.getImageUrl());
@@ -143,7 +143,7 @@ public class UserService {
     }
 
     public void updatePassword(String email,String newPassword) {
-        UserEntity userEntity = userRepository.findByEmail(email).orElseThrow();
+        UserEntity userEntity = findByEmail(email);
         userEntity.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(userEntity);
         updateAuthentication(userEntity);
