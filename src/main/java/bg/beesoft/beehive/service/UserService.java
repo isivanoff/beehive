@@ -10,7 +10,10 @@ import bg.beesoft.beehive.repository.UserRepository;
 import bg.beesoft.beehive.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationListener;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,10 +21,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService implements ApplicationListener<AuthenticationSuccessEvent> {
 
     private final UserDetailsService appUserDetailsService;
     private UserRepository userRepository;
@@ -97,9 +102,10 @@ public class UserService {
                         setFirstName(userRegisterDTO.getFirstName()).
                         setLastName(userRegisterDTO.getLastName()).
                         setActive(true).
+                        setLastLoggedIn(LocalDateTime.now()).
                         setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
 
-            userRepository.save(newUser);
+        userRepository.save(newUser);
 
         updateAuthentication(newUser);
     }
@@ -121,7 +127,7 @@ public class UserService {
     }
 
     public UserEntity findByEmail(String name) {
-        return userRepository.findByEmail(name).orElseThrow(() -> new NotFoundException("Невалиден акаунт.") );
+        return userRepository.findByEmail(name).orElseThrow(() -> new NotFoundException("Невалиден акаунт."));
     }
 
     public UserEditDTO getEditDetails(String username) {
@@ -142,7 +148,7 @@ public class UserService {
         SecurityContextHolder.clearContext();
     }
 
-    public void updatePassword(String email,String newPassword) {
+    public void updatePassword(String email, String newPassword) {
         UserEntity userEntity = findByEmail(email);
         userEntity.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(userEntity);
@@ -151,5 +157,31 @@ public class UserService {
 
     public boolean emailIsTaken(String email) {
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    @Override
+    public void onApplicationEvent(AuthenticationSuccessEvent event) {
+        String email = ((UserDetails) event.getAuthentication().getPrincipal()).getUsername();
+        userRepository.save(findByEmail(email).setLastLoggedIn(LocalDateTime.now()));
+    }
+
+
+    public boolean isBlocked(String userName) {
+        UserEntity userEntity = findByEmail(userName);
+        return userEntity.isBanned() || !userEntity.isActive();
+    }
+
+    @Scheduled(cron = "@monthly")   //(cron = "* * * 1 * *")
+    public void scheduleInactiveUserDeactivation() {
+        LocalDateTime current_timestamp = LocalDateTime.now();
+
+        userRepository.findAll().
+                forEach(user -> {
+                    long months = ChronoUnit.MONTHS.between(user.getLastLoggedIn(), current_timestamp);
+                    if (months > 3 && user.isActive()) {
+                        user.setActive(false);
+                        userRepository.save(user);
+                    }
+                });
     }
 }

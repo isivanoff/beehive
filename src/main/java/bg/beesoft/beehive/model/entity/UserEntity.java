@@ -1,6 +1,7 @@
 package bg.beesoft.beehive.model.entity;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,12 +23,29 @@ public class UserEntity extends BaseEntity {
     private String lastName;
 
     @Column(nullable = false)
+    private boolean isBanned = false;
+
+    @Column(nullable = false)
     private boolean isActive;
 
     private String imageUrl;
 
+    LocalDateTime lastLoggedIn;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<UserRoleEntity> userRoles = new ArrayList<>();
+
+    public UserEntity() {
+    }
+
+    public boolean isBanned() {
+        return isBanned;
+    }
+
+    public UserEntity setBanned(boolean banned) {
+        isBanned = banned;
+        return this;
+    }
 
     public String getEmail() {
         return email;
@@ -35,6 +53,15 @@ public class UserEntity extends BaseEntity {
 
     public UserEntity setEmail(String email) {
         this.email = email;
+        return this;
+    }
+
+    public LocalDateTime getLastLoggedIn() {
+        return lastLoggedIn;
+    }
+
+    public UserEntity setLastLoggedIn(LocalDateTime lastLoggedIn) {
+        this.lastLoggedIn = lastLoggedIn;
         return this;
     }
 

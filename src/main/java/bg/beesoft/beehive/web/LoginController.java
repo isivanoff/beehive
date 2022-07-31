@@ -32,7 +32,7 @@ public class LoginController {
 
         redirectAttributes.addFlashAttribute(UsernamePasswordAuthenticationFilter.SPRING_SECURITY_FORM_USERNAME_KEY, userName);
         try {
-            if (!userService.findByEmail(userName).isActive()) {
+            if (userService.isBlocked(userName)) {
                 redirectAttributes.addFlashAttribute("inactive", true);
             } else {
                 redirectAttributes.addFlashAttribute("bad_credentials", true);
