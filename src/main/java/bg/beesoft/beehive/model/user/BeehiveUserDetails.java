@@ -13,18 +13,23 @@ public class BeehiveUserDetails implements UserDetails {
     private final String username;
     private final String firstName;
     private final String lastName;
+    private final boolean enabled;
     private final Collection<GrantedAuthority> authorities;
+
+
 
     public BeehiveUserDetails(String password,
                               String username,
                               String firstName,
                               String lastName,
+                              boolean enabled,
                               Collection<GrantedAuthority> authorities) {
         this.password = password;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.authorities = authorities;
+        this.enabled = enabled;
     }
 
     public String getFirstName() {
@@ -72,7 +77,7 @@ public class BeehiveUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 
 
