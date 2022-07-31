@@ -45,7 +45,7 @@ public class RegistrationController {
             return "redirect:/users/register";
         }
 
-        if (userService. emailIsTaken(userModel.getEmail())) {
+        if (userService.emailIsTaken(userModel.getEmail())) {
             redirectAttributes.addFlashAttribute("userModel", userModel);
             redirectAttributes.addFlashAttribute("takenEmail", true);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.userModel", bindingResult);

@@ -18,6 +18,8 @@ public class AppUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+
+
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
@@ -33,12 +35,14 @@ public class AppUserDetailsService implements UserDetailsService {
                 userEntity.getEmail(),
                 userEntity.getFirstName(),
                 userEntity.getLastName(),
+                userEntity.isActive(),
                 userEntity.
                         getUserRoles().
                         stream().
                         map(this::map).
                         toList()
         );
+
     }
 
     private GrantedAuthority map(UserRoleEntity userRole) {
