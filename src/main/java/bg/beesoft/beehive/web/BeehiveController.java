@@ -120,7 +120,7 @@ public class BeehiveController {
         return "beehive-view";
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id,@AuthenticationPrincipal UserDetails userDetails) {
         Long apiaryId = beehiveService.findApiaryIdByBeehiveId(id,userDetails);
         beehiveService.deleteById(id,userDetails);

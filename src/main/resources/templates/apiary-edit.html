@@ -72,17 +72,49 @@
             <input class="form-control" type="text" id="inputImg" th:field="*{imageURL}" th:errorclass="is-invalid">
         </div>
         <div class="row justify-content-center py-3">
-            <div class="col-4">
+            <div class="col-4 text-center">
                 <button type="submit" class="btn btn-primary">Запази</button>
             </div>
 
-            <div class="col-4">
-                <a th:href="@{/apiaries/delete/} + ${apiaryEditDTO.id}" class="btn btn-secondary">Изтриване</a>
-            </div>
+
         </div>
+
     </form>
 
-    <div th:replace="fragments/footer">Footer</div>
+    <div class="col-12 text-center my-3">
+        <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            Изтриване
+        </button>
+
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изтриване на пчелин</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Сигурни ли сте, че искате да изтриете пчелина?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                <form th:action="@{/apiaries/delete/} + ${apiaryEditDTO.id}"
+                      th:method="delete">
+                    <button  type="submit" class="btn btn-primary"
+                             id="apiaryDeleteBtn">Изтриване
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div th:replace="fragments/footer">Footer</div>
 
 </body>
 </html>

@@ -96,6 +96,7 @@
 
 
 
+
     </style>
     <script src="http://ajax.aspnetcdn.com/ajax/jquery.templates/beta1/jquery.tmpl.js"></script>
 
@@ -305,7 +306,7 @@
                         <nav>
                             <ul class="pagination">
                                 <li class="page-item">
-                                    <button class="page-link" id="firstPage" >Първа</button>
+                                    <button class="page-link" id="firstPage">Първа</button>
                                 </li>
                             </ul>
 
@@ -313,7 +314,7 @@
                         <nav>
                             <ul class="pagination">
                                 <li class="page-item">
-                                    <button class="page-link" id="prevPage" >Предишна</button>
+                                    <button class="page-link" id="prevPage">Предишна</button>
                                 </li>
                             </ul>
 
@@ -321,7 +322,7 @@
                         <nav>
                             <ul class="pagination">
                                 <li class="page-item active">
-                                    <button class="page-link" id="curPage" >Текуща</button>
+                                    <button class="page-link" id="curPage">Текуща</button>
                                 </li>
                             </ul>
 
@@ -329,7 +330,7 @@
                         <nav>
                             <ul class="pagination">
                                 <li class="page-item">
-                                    <button class="page-link" id="nextPage" >Следваща</button>
+                                    <button class="page-link" id="nextPage">Следваща</button>
                                 </li>
                             </ul>
 
@@ -337,7 +338,7 @@
                         <nav>
                             <ul class="pagination">
                                 <li class="page-item">
-                                    <button class="page-link" id="lastPage" >Последна</button>
+                                    <button class="page-link" id="lastPage">Последна</button>
                                 </li>
                             </ul>
 
@@ -362,8 +363,12 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
-                <a th:href="@{/beehives/delete/} + ${beehive.id}" type="button" class="btn btn-primary"
-                   id="beehiveDeleteBtn">Изтриване</a>
+                <form th:action="@{/beehives/delete/} + ${beehive.id}"
+                      th:method="delete">
+                    <button  type="submit" class="btn btn-primary"
+                            id="beehiveDeleteBtn">Изтриване
+                    </button>
+                </form>
             </div>
         </div>
     </div>
@@ -390,8 +395,8 @@
         </td>
     </tr>
 
-</script>
 
+</script>
 
 
 <div class="modal fade" id="taskFullModal" tabindex="-1" aria-labelledby="taskFullModalLabel" aria-hidden="true">
@@ -414,6 +419,7 @@
     <strong>Loading...</strong>
     <div class="spinner-border ms-auto text-warning" role="status" aria-hidden="true"></div>
 </div>
+
 
 
 </script>
@@ -541,16 +547,8 @@
 
 
 
+
 </script>
-
-
-
-
-
-
-
-
-
 
 
 <div class="modal fade" id="deleteTaskModal" tabindex="-1" aria-labelledby="deleteTaskModalLabel" aria-hidden="true">

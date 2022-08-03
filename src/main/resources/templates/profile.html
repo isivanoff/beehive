@@ -21,12 +21,17 @@
                             <div class="text-center text-white bg-secondary bg-opacity-50"
                                  style="border-top-left-radius: .5rem; border-top-right-radius: .5rem;">
                                 <div class="my-3">
-                                  <img th:src="${user.imageUrl}" class="w-50 img-thumbnail" onerror="this.onerror=null;this.src='/images/avatar.png';"/>
+                                    <img th:src="${user.imageUrl}" class="w-50 img-thumbnail"
+                                         onerror="this.onerror=null;this.src='/images/avatar.png';"/>
                                 </div>
                                 <div class="pb-3 btn-group" role="group">
-                                    <a th:href="@{/users/profile/edit}"  class="btn btn-primary"  role="button">Редактирай</a>
-                                    <a th:href="@{/users/password-change}"  class="btn btn-secondary">Смяна на парола</a>
-                                    <a th:href="@{/users/delete}"  class="btn btn-secondary">Изтриване</a>
+                                    <a th:href="@{/users/profile/edit}" class="btn btn-primary"
+                                       role="button">Редактирай</a>
+                                    <a th:href="@{/users/password-change}" class="btn btn-secondary">Смяна на парола</a>
+                                    <button class="btn btn-secondary" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal">
+                                        Изтриване
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -60,6 +65,31 @@
         </div>
     </section>
 </div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Изтриване на профила</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Сигурни ли сте, че искате да изтриете профила си? Вашите данни няма да бъдат възстановени ако решите да
+                се върнете.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Затвори</button>
+                <form th:action="@{/users/delete}"
+                      th:method="delete">
+                    <button type="submit" class="btn btn-primary"
+                            id="profileDeleteBtn">Изтриване
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div th:replace="fragments/footer">Footer</div>
 

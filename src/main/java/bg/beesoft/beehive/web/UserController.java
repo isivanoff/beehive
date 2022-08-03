@@ -76,7 +76,7 @@ public class UserController {
         return "redirect:/users/profile";
     }
 
-    @GetMapping("/delete")
+    @DeleteMapping("/delete")
     public String delete(@AuthenticationPrincipal UserDetails userDetails) {
         apiaryService.deleteAllApiaries(userDetails.getUsername());
         userService.deleteByEmail(userDetails.getUsername());
