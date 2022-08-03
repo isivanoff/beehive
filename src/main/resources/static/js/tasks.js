@@ -3,6 +3,8 @@ $(document).ready(function () {
     getTasks(beehiveId);
 });
 
+const csrfHeaderName = document.head.querySelector('[name=_csrf_header]').content
+const csrfHeaderValue = document.head.querySelector('[name=_csrf]').content
 
 function getTasks(beehiveId, page = 0) {
     $("#tasks").html("");
@@ -106,11 +108,15 @@ function deleteTask(taskId) {
     var myHeaders = new Headers();
     var beehiveId = document.getElementById('beehiveId').value
 
+    myHeaders.append(csrfHeaderName, csrfHeaderValue  );
+
     var requestOptions = {
         method: 'DELETE',
         headers: myHeaders,
         redirect: 'follow'
     };
+
+
 
     fetch(`http://localhost:8080/api/tasks/delete/${taskId}`, requestOptions)
         .then(response => response.text())
