@@ -1,5 +1,6 @@
 package bg.beesoft.beehive.service;
 
+import bg.beesoft.beehive.model.dto.UserEditAdminDTO;
 import bg.beesoft.beehive.model.dto.UserEditDTO;
 import bg.beesoft.beehive.model.dto.UserRegisterDTO;
 import bg.beesoft.beehive.model.entity.UserEntity;
@@ -192,5 +193,9 @@ public class UserService implements ApplicationListener<AuthenticationSuccessEve
                 .stream()
                 .map(user->modelMapper.map(user,UserAdminView.class))
                 .collect(Collectors.toList());
+    }
+
+    public UserEditAdminDTO findUserAdminEditById(Long id) {
+        return modelMapper.map(userRepository.findById(id).orElseThrow(() -> new NotFoundException("Невалиден потребител")),UserEditAdminDTO.class);
     }
 }
