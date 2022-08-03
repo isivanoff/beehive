@@ -32,8 +32,12 @@ public class BeehiveController {
     }
 
     @ModelAttribute("beehiveAddDTO")
-    public BeehiveAddDTO initModel() {
-        return new BeehiveAddDTO();
+    public BeehiveAddDTO initModel(@RequestParam Optional<Long> apiary) {
+        BeehiveAddDTO beehiveAddDTO = new BeehiveAddDTO();
+        if (apiary.isPresent()){
+            beehiveAddDTO.setApiaryId(apiary.get());
+        }
+        return beehiveAddDTO;
     }
 
     @ModelAttribute("beehiveEditDTO")

@@ -161,7 +161,7 @@ public class ApiaryService {
     }
 
     public void checkApiary(Long apiaryId, UserDetails userDetails) {
-        if (!apiaryRepository.findById(apiaryId).equals(userDetails.getUsername())){
+        if (!apiaryRepository.findById(apiaryId).orElseThrow(() -> new NotFoundException("Пчелинът не е намерен.")).getBeekeeper().getEmail().equals(userDetails.getUsername())){
             throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
         }
     }
