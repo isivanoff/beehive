@@ -2,6 +2,7 @@ package bg.beesoft.beehive.service;
 
 import bg.beesoft.beehive.model.dto.BeehiveAddDTO;
 import bg.beesoft.beehive.model.dto.BeehiveEditDTO;
+import bg.beesoft.beehive.model.dto.SearchBeehiveDTO;
 import bg.beesoft.beehive.model.entity.ApiaryEntity;
 import bg.beesoft.beehive.model.entity.BeehiveEntity;
 import bg.beesoft.beehive.model.entity.QueenEntity;
@@ -11,6 +12,7 @@ import bg.beesoft.beehive.model.exception.UnauthorizedRequestException;
 import bg.beesoft.beehive.model.view.BeehiveFullView;
 import bg.beesoft.beehive.model.view.BeehiveView;
 import bg.beesoft.beehive.repository.BeehiveRepository;
+import bg.beesoft.beehive.repository.BeehiveSpecification;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -136,7 +138,7 @@ public class BeehiveService {
         beehiveRepository.save(beehiveEntity);
     }
 
-    public BeehiveEntity findById(Long id){
+    public BeehiveEntity findById(Long id) {
         return beehiveRepository.findById(id).orElseThrow(() -> new NotFoundException("Кошерът не е намерен."));
     }
 
@@ -152,4 +154,17 @@ public class BeehiveService {
     public void save(BeehiveEntity beehiveEntity) {
         beehiveRepository.save(beehiveEntity);
     }
+
+    public Page<BeehiveView> searchBeehives(SearchBeehiveDTO searchBeehiveDTO, Long apiaryId, Pageable pageable, UserDetails userDetails) {
+        if (!apiaryService.findById(apiaryId).getBeekeeper().getEmail().equals(userDetails.getUsername())) {
+            throw new UnauthorizedRequestException("Нямате достъп до този пчелин.");
+        }
+
+        return beehiveRepository.findAll(new BeehiveSpecification(searchBeehiveDTO, apiaryId), pageable)
+                .map(b -> modelMapper.map(b, BeehiveView.class));
+
+//        Page<BeehiveView> beehiveViews = beehiveRepository.findByApiaryId(apiaryId, pageable)
+//                .map(b -> modelMapper.map(b, BeehiveView.class));
+    }
 }
+

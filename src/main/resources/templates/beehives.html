@@ -131,6 +131,10 @@
 
 
 
+
+
+
+
             </style>
 
             </head>
@@ -143,7 +147,8 @@
                                 <div class="card mb-3 p-0" style="max-height:200px;">
                                     <div class="row g-0">
                                         <div class="col-md-4">
-                                            <img th:src="${apiary.imageUrl}" class="img-fluid rounded-start" alt="..." onerror="this.onerror=null;this.src='/images/apiary_placeholder.png';"
+                                            <img th:src="${apiary.imageUrl}" class="img-fluid rounded-start" alt="..."
+                                                 onerror="this.onerror=null;this.src='/images/apiary_placeholder.png';"
                                                  style="max-height: 198px; width: 100%; object-fit: cover;">
                                         </div>
                                         <div class="col-md-8">
@@ -171,6 +176,48 @@
                                         <span>Добави кошер</span></a>
                                 </div>
                             </div>
+                            <form
+                                    th:method="GET"
+                                    th:action="@{/apiaries/view/} + ${apiary.id}"
+                                    th:object="${searchBeehiveModel}"
+                                    class="form-inline"
+                                    style="justify-content: center; margin-top: 50px;">
+                                <div class="row">
+
+                                    <div class="col-3">
+                                        <label class="text-center text-white font-weight-bold" for="referenceNumber">Номер</label>
+                                        <input
+                                                th:field="*{referenceNumber}"
+                                                th:errorclass="is-invalid"
+                                                class="form-control mr-sm-2"
+                                                type="search"
+                                                placeholder="Номер"
+                                                aria-label="Търси"
+                                                id="referenceNumber"
+                                        /></div>
+
+                                    <div class="col-3">
+                                        <label class="text-center text-white font-weight-bold" for="type">Тип
+                                            кошер</label>
+                                        <select id="type"
+                                                name="type"
+                                                th:errorclass="is-invalid"
+                                                class="form-select">
+                                            <option value="">- Избери тип кошер -</option>
+                                            <option th:each="e : ${T(bg.beesoft.beehive.model.entity.enums.BeeHiveTypeEnum).values()}"
+                                                    th:text="${e}"
+                                                    th:value="${e}"
+                                                    th:selected="${e} == *{type}">
+                                                Тип кошер.
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <button class="btn btn-outline-info my-2 my-sm-0 col-2" type="submit">Търси</button>
+                                </div>
+
+                            </form>
+
+
                         </div>
                         <table class="table table-striped table-hover">
                             <thead>
@@ -245,8 +292,9 @@
                                 <ul class="pagination">
                                     <li class="page-item active">
                                         <a
-                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getNumber()})}"
-                                           class="page-link" href="#" th:text="${beehives.getNumber() +1}">Текуща</a>
+                                                th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getNumber()})}"
+                                                class="page-link" href="#"
+                                                th:text="${beehives.getNumber() +1}">Текуща</a>
 
                                     </li>
                                 </ul>

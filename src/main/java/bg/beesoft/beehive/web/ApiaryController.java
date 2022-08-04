@@ -2,6 +2,7 @@ package bg.beesoft.beehive.web;
 
 import bg.beesoft.beehive.model.dto.ApiaryAddDTO;
 import bg.beesoft.beehive.model.dto.ApiaryEditDTO;
+import bg.beesoft.beehive.model.dto.SearchBeehiveDTO;
 import bg.beesoft.beehive.model.entity.AddressEntity;
 import bg.beesoft.beehive.model.view.ApiaryView;
 import bg.beesoft.beehive.model.view.BeehiveView;
@@ -22,8 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
-import java.security.Principal;
-import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -87,7 +86,7 @@ public class ApiaryController {
 
     @GetMapping("/edit/{id}")
     public String edit(Model model, @PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        ApiaryEditDTO apiaryEditDTO = apiaryService.findById(id,userDetails);
+        ApiaryEditDTO apiaryEditDTO = apiaryService.findById(id, userDetails);
         model.addAttribute("apiaryEditDTO", apiaryEditDTO);
         return "apiary-edit";
     }
@@ -118,7 +117,7 @@ public class ApiaryController {
 
         }
 
-        apiaryService.update(apiaryEditDTO, optionalAddress,userDetails);
+        apiaryService.update(apiaryEditDTO, optionalAddress, userDetails);
 
 
         return "redirect:/apiaries/all";
@@ -126,7 +125,7 @@ public class ApiaryController {
 
     @DeleteMapping("/delete/{id}")
     public String delete(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails) {
-        apiaryService.deleteById(id,userDetails.getUsername());
+        apiaryService.deleteById(id, userDetails.getUsername());
         return "redirect:/apiaries/all";
     }
 
@@ -138,12 +137,33 @@ public class ApiaryController {
                                direction = Sort.Direction.ASC,
                                page = 0,
                                size = 10) Pageable pageable,
-                       @AuthenticationPrincipal UserDetails userDetails) {
-        ApiaryView apiary = apiaryService.findViewById(id,userDetails);
-        Page<BeehiveView> beehives = beehiveService.findViewAllByApiaryId(id,pageable,userDetails);
-
+                       @AuthenticationPrincipal UserDetails userDetails,
+                       @Valid SearchBeehiveDTO searchBeehiveDTO,
+                       BindingResult bindingResult) {
+        ApiaryView apiary = apiaryService.findViewById(id, userDetails);
         model.addAttribute("apiary", apiary);
-        model.addAttribute("beehives", beehives);
+
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("searchBeehiveModel", searchBeehiveDTO);
+            model.addAttribute(
+                    "org.springframework.validation.BindingResult.searchOfferModel",
+                    bindingResult);
+            return "beehives";
+        }
+        if (!model.containsAttribute("searchBeehiveModel")) {
+            model.addAttribute("searchBeehiveModel", searchBeehiveDTO);
+        }
+
+        if (!searchBeehiveDTO.isEmpty()) {
+            model.addAttribute("beehives", beehiveService.searchBeehives(searchBeehiveDTO,id,pageable,userDetails));
+
+        } else {
+            Page<BeehiveView> beehives = beehiveService.findViewAllByApiaryId(id, pageable, userDetails);
+            model.addAttribute("beehives", beehives);
+
+        }
+
 
         return "beehives";
     }
