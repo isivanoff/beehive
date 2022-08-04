@@ -8,6 +8,7 @@ import bg.beesoft.beehive.model.entity.UserRoleEntity;
 import bg.beesoft.beehive.model.entity.enums.UserRoleEnum;
 import bg.beesoft.beehive.model.exception.NotFoundException;
 import bg.beesoft.beehive.model.view.UserAdminView;
+import bg.beesoft.beehive.model.view.UserEditAdminView;
 import bg.beesoft.beehive.repository.UserRepository;
 import bg.beesoft.beehive.repository.UserRoleRepository;
 import org.modelmapper.ModelMapper;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.authentication.event.AuthenticationSuccessEvent;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -196,6 +198,37 @@ public class UserService implements ApplicationListener<AuthenticationSuccessEve
     }
 
     public UserEditAdminDTO findUserAdminEditById(Long id) {
-        return modelMapper.map(userRepository.findById(id).orElseThrow(() -> new NotFoundException("Невалиден потребител")),UserEditAdminDTO.class);
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new NotFoundException("Невалиден потребител"));
+        UserEditAdminDTO userEditAdminDTO = new UserEditAdminDTO();
+        userEditAdminDTO.
+                setIsActive(userEntity.isActive()).
+                setIsBanned(userEntity.isBanned()).
+                setUserRoles(userEntity.getUserRoles().stream().map(e->e.getUserRole()).collect(Collectors.toList())) ;
+        return userEditAdminDTO;
+    }
+
+    public void updateAdminDTO(UserEditAdminDTO userEditAdminDTO, Long id) {
+        UserEntity userEntity = userRepository.findById(id).orElseThrow(()->new NotFoundException("Невалиден потребител."));
+        userEntity.setActive(!userEditAdminDTO.isActive())
+                .setBanned(userEditAdminDTO.isBanned())
+                .setUserRoles(
+                        userEditAdminDTO.getUserRoles().stream().map(
+                                role -> userRoleRepository.findByUserRole(role)
+                        ).collect(Collectors.toList())
+                );
+        userRepository.save(userEntity);
+    }
+
+    public UserEditAdminView findUserViewById(Long id) {
+     return modelMapper.map(findById(id),UserEditAdminView.class);
+
+    }
+
+    public UserEntity findById(Long id){
+        return userRepository.findById(id).orElseThrow(()-> new NotFoundException("Невалиден потребител."));
+    }
+
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 }

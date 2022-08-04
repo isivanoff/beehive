@@ -144,7 +144,7 @@ public class BeehiveController {
         return "beehive-edit";
     }
 
-    @PostMapping("/edit/{id}")
+    @PutMapping("/edit/{id}")
     public String edit(@PathVariable Long id, @Valid BeehiveEditDTO beehiveEditDTO,BindingResult bindingResult, RedirectAttributes redirectAttributes, @AuthenticationPrincipal UserDetails userDetails){
 
 

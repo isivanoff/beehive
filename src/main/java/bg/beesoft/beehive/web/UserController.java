@@ -89,7 +89,7 @@ public class UserController {
         return "password-change";
     }
 
-    @PostMapping("/password-change")
+    @PutMapping("/password-change")
     public String changePassword(@Valid ChangePasswordDTO changePasswordDTO,
                                  BindingResult bindingResult,
                                  RedirectAttributes redirectAttributes,
