@@ -23,7 +23,7 @@ public class UserEntity extends BaseEntity {
     private String lastName;
 
     @Column(nullable = false)
-    private boolean isBanned = false;
+    private boolean isBanned;
 
     @Column(nullable = false)
     private boolean isActive;
