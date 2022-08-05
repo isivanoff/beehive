@@ -72,6 +72,8 @@ public class UserService implements ApplicationListener<AuthenticationSuccessEve
                 setUserRoles(roles).
                 setFirstName("Admin").
                 setLastName("Adminov").
+                setActive(true).
+
                 setEmail("admin@example.com").
                 setPassword(passwordEncoder.encode(adminPass));
 
@@ -83,6 +85,8 @@ public class UserService implements ApplicationListener<AuthenticationSuccessEve
                 setUserRoles(roles).
                 setFirstName("Moderator").
                 setLastName("Moderatorov").
+                setActive(true).
+
                 setEmail("moderator@example.com").
                 setPassword(passwordEncoder.encode(adminPass));
 
@@ -94,6 +98,7 @@ public class UserService implements ApplicationListener<AuthenticationSuccessEve
                 setUserRoles(roles).
                 setFirstName("User").
                 setLastName("Userov").
+                setActive(true).
                 setEmail("user@example.com").
                 setPassword(passwordEncoder.encode(adminPass));
 
