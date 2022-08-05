@@ -24,7 +24,10 @@ dependencies {
     implementation 'junit:junit:4.13.1'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
 	implementation "mysql:mysql-connector-java:8.0.29"
+	testRuntimeOnly 'org.hsqldb:hsqldb'
+
 
 }
 
