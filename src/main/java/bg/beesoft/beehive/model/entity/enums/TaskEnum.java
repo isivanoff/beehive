@@ -6,7 +6,7 @@ public enum TaskEnum {
     MEDICATION,
     HARVESTING,
     QUEEN_REPLACEMENT,
-    QUUEN_MARK,
+    QUEEN_MARK,
     EXTENDING,
     NARROWING,
     WINTER_PREPARE,

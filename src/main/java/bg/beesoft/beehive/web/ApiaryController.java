@@ -136,7 +136,7 @@ public class ApiaryController {
                                sort = "referenceNumber",
                                direction = Sort.Direction.ASC,
                                page = 0,
-                               size = 10) Pageable pageable,
+                               size = 5) Pageable pageable,
                        @AuthenticationPrincipal UserDetails userDetails,
                        @Valid SearchBeehiveDTO searchBeehiveDTO,
                        BindingResult bindingResult) {

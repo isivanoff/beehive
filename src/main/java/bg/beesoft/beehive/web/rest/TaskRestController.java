@@ -29,7 +29,7 @@ public class TaskRestController {
                                                            sort = "date",
                                                            direction = Sort.Direction.DESC,
                                                            page = 0,
-                                                           size = 10) Pageable pageable) {
+                                                           size = 5) Pageable pageable) {
         return ResponseEntity.ok(taskService.findAllByBeehiveId(beehiveId,pageable));
     }
 
