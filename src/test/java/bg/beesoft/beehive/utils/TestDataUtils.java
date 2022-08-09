@@ -51,7 +51,8 @@ public class TestDataUtils {
                 setEmail(email).
                 setFirstName("User").
                 setLastName("Userov").
-                setActive(true);
+                setActive(true).setPassword("123456");
+
         return userRepository.save(user);
     }
 
