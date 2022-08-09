@@ -9,10 +9,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
@@ -36,19 +38,19 @@ public class AdminControllerIT {
     private UserEntity testUser;
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         UserEntity admin = testDataUtils.createTestAdmin("mockAdmin@example.com");
-     userDetails = new BeehiveUserDetails(
-             admin.getPassword(),
-             admin.getEmail(),
-             admin.getFirstName(),
-             admin.getLastName(),
-             admin.isActive(),
-             new ArrayList<>(),
-             admin.isBanned()
-     );
+        userDetails = new BeehiveUserDetails(
+                admin.getPassword(),
+                admin.getEmail(),
+                admin.getFirstName(),
+                admin.getLastName(),
+                admin.isActive(),
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN")),
+                admin.isBanned()
+        );
 
-     testUser = (UserEntity) testDataUtils.createTestUser("mockUser@example.com");
+        testUser = testDataUtils.createTestUser("mockUser@example.com");
     }
 
     @AfterEach
@@ -57,23 +59,25 @@ public class AdminControllerIT {
     }
 
     @Test
-    void testAdminUsersPageShown() throws Exception {
-        mockMvc.perform(get("/admin/users").with(user(userDetails)))
-                .andExpect(status().isOk())
-                .andExpect(view().name("users"));
-    }
-
-    @Test
     void testAdminEditUserPageShown() throws Exception {
-        mockMvc.perform(get("/admin/users/edit/{id}",testUser.getId()).with(user(userDetails)))
+        mockMvc.perform(get("/admin/users/edit/{id}", testUser.getId()).with(user(userDetails)))
                 .andExpect(status().isOk())
                 .andExpect(view().name("admin-user-edit"));
     }
 
     @Test
-    @WithMockUser(username = "admin@example.com",roles = {"ADMIN"})
+    @WithUserDetails(value = "admin@example.com")
+    void testAdminUsersPageShown() throws Exception {
+        mockMvc.perform(get("/admin/users"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("users"));
+    }
+
+
+    @Test
+    @WithMockUser(username = "admin@example.com", roles = {"ADMIN"})
     void testDeleteUser() throws Exception {
-        mockMvc.perform(delete("/admin/delete/{id}",testUser.getId())
+        mockMvc.perform(delete("/admin/delete/{id}", testUser.getId())
                 .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/admin/users"));
