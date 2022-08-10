@@ -27,8 +27,7 @@ public class AdminController {
     @ModelAttribute("user")
     public UserEditAdminDTO initUserModel(@PathVariable Optional<Long> id) {
         if (id.isPresent()) {
-            UserEditAdminDTO userEditAdminDTO = userService.findUserAdminEditById(id.get());
-            return userEditAdminDTO;
+            return userService.findUserAdminEditById(id.get());
         }
         return new UserEditAdminDTO();
     }
