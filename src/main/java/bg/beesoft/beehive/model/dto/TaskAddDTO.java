@@ -32,18 +32,16 @@ public class TaskAddDTO {
     @NotNull
     private TemperamentEnum temperament;
 
-    @NotNull
+
     private Long queenId;
-    @NotNull
+
     private boolean queenAlive;
 
-    @NotNull
     private boolean queenMarked;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate queenDateOfMark;
 
-    @NotNull
     private boolean queenActive;
 
     private boolean eggs;

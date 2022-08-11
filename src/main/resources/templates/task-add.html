@@ -20,6 +20,7 @@
 
         <h6>Информация</h6>
         <hr class="mt-0 mb-4">
+        <input type="hidden" name="beehiveId" id="beehiveId" th:value="*{beehiveId}">
 
         <div class="form-group col-4">
             <label class="text-center text-white font-weight-bold" for="task">Дейност</label>
@@ -52,6 +53,8 @@
 
         <h6>Майка</h6>
         <hr class="mt-0 mb-4">
+
+        <input type="hidden" name="queenId" id="queenId" th:value="*{queenId}">
 
         <div class="form-check form-switch col-4 text-white">
             <input type="checkbox" class="form-check-input" role="switch" th:checked="*{queenAlive}"

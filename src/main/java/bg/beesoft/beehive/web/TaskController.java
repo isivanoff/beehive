@@ -7,7 +7,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -22,19 +25,15 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    @ModelAttribute("taskAddDTO")
-    public TaskAddDTO initModel(@PathVariable Long id,@AuthenticationPrincipal UserDetails userDetails){
-        TaskAddDTO taskAddDTO = taskService.initializeTask(id,userDetails);
-        return taskAddDTO;
-    }
-
     @GetMapping("/{id}/add")
-    public String addTask(@PathVariable Long id){
+    public String addTask(@PathVariable Long id, @AuthenticationPrincipal UserDetails userDetails, Model model) {
+        model.addAttribute("taskAddDTO", taskService.initializeTask(id, userDetails));
         return "task-add";
     }
 
     @GetMapping("/{id}/add/error")
-    public String add(@PathVariable Long id) {
+    public String add(Model model, @Valid TaskAddDTO taskAddDTO, BindingResult bindingResult) {
+        model.addAttribute("taskAddDTO", taskAddDTO);
         return "task-add";
     }
 
@@ -43,15 +42,15 @@ public class TaskController {
                       BindingResult bindingResult,
                       RedirectAttributes redirectAttributes,
                       @PathVariable Long id,
-                      @AuthenticationPrincipal UserDetails userDetails){
+                      @AuthenticationPrincipal UserDetails userDetails) {
 
-        if(bindingResult.hasErrors()){
-            redirectAttributes.addFlashAttribute("taskAddDTO",taskAddDTO);
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("taskAddDTO", taskAddDTO);
             redirectAttributes.addFlashAttribute("org.springframework.validation.BindingResult.taskAddDTO", bindingResult);
             return "redirect:/tasks/" + id + "/add/error";
         }
 
-        taskService.addTask(taskAddDTO,id,userDetails);
+        taskService.addTask(taskAddDTO, id, userDetails);
 
         return "redirect:/beehives/view/" + id;
     }

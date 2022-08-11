@@ -30,7 +30,10 @@ public class TaskService {
     }
 
     public TaskAddDTO initializeTask(Long id,UserDetails userDetails) {
-        return modelMapper.map(beehiveService.findById(id,userDetails),TaskAddDTO.class);
+        BeehiveEntity beehive = beehiveService.findById(id,userDetails);
+        TaskAddDTO taskAddDTO = modelMapper.map(beehive,TaskAddDTO.class);
+        taskAddDTO.setBeehiveId(beehive.getId());
+        return taskAddDTO;
     }
 
     public void addTask(TaskAddDTO taskAddDTO, Long id, UserDetails userDetails) {
