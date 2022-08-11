@@ -287,7 +287,7 @@
                                 <ul class="pagination">
                                     <li class="page-item" th:classappend="${beehives.hasPrevious() ? '' : 'disabled'}">
                                         <a th:if="${beehives.hasPrevious()}"
-                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getNumber() - 1})}"
+                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getNumber() - 1}, referenceNumber=${searchBeehiveModel.referenceNumber},type=${searchBeehiveModel.type})}"
                                            class="page-link" href="#" th:text="${beehives.getNumber() }">Назад</a>
                                     </li>
                                 </ul>
@@ -296,7 +296,7 @@
                                 <ul class="pagination">
                                     <li class="page-item active">
                                         <a
-                                                th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getNumber()})}"
+                                                th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getNumber()}, referenceNumber=${searchBeehiveModel.referenceNumber},type=${searchBeehiveModel.type})}"
                                                 class="page-link" href="#"
                                                 th:text="${beehives.getNumber() +1}">Текуща</a>
 
@@ -307,7 +307,7 @@
                                 <ul class="pagination">
                                     <li class="page-item" th:classappend="${beehives.hasNext() ? '' : 'disabled'}">
                                         <a th:if="${beehives.hasNext()}"
-                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getNumber() + 1})}"
+                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getNumber() + 1}, referenceNumber=${searchBeehiveModel.referenceNumber},type=${searchBeehiveModel.type})}"
                                            class="page-link" href="#" th:text="${beehives.getNumber() + 2}">Напред</a>
 
                                     </li>
@@ -317,7 +317,7 @@
                                 <ul class="pagination">
                                     <li class="page-item" th:classappend="${beehives.isLast()} ? 'disabled' : ''">
                                         <a th:unless="${beehives.isLast()}"
-                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getTotalPages() - 1})}"
+                                           th:href="@{${'/apiaries/view/'+apiary.id}(size=${beehives.getSize()},page=${beehives.getTotalPages() - 1}, referenceNumber=${searchBeehiveModel.referenceNumber},type=${searchBeehiveModel.type})}"
                                            class="page-link" href="#">Последна</a>
                                         <a th:if="${beehives.isLast()}"
                                            class="page-link" href="#">Последна</a>
