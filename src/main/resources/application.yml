@@ -1,10 +1,11 @@
 spring:
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/beehive?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC
-    username: root
+    driverClassName: org.postgresql.Driver
+    url: ${JDBC_DATABASE_URL:jdbc:mysql://localhost:3306/beehive?allowPublicKeyRetrieval=true&useSSL=false&createDatabaseIfNotExist=true&serverTimezone=UTC}
+    username: ${JDBC_DATABASE_USERNAME:root}
+    password: ${JDBC_DATABASE_PASSWORD:}
   jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     defer-datasource-initialization: true
@@ -12,6 +13,8 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
+server:
+  port: ${PORT:8080}
   //sql:
   //  init:
   //    mode: always
