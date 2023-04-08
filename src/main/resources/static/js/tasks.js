@@ -10,7 +10,7 @@ function getTasks(beehiveId, page = 0) {
     $("#tasks").html("");
     $("#loading").tmpl().appendTo('#tasks');
 
-    fetch(`https://beehivee.herokuapp.com/api/${beehiveId}/tasks?page=${page}`, {
+    fetch(`${window. location. origin}/api/${beehiveId}/tasks?page=${page}`, {
         headers: {
             "Accept": "application/json"
         }
@@ -72,7 +72,7 @@ function updateNav(data, beehiveId) {
 function taskDetails(taskId) {
     $("#fullModalContent").html("");
     $("#loading").tmpl().appendTo('#fullModalContent');
-    fetch(`https://beehivee.herokuapp.com/api/tasks/view/${taskId}`, {
+    fetch(`${window. location. origin}/api/tasks/view/${taskId}`, {
         headers: {
             "Accept": "application/json"
         }
@@ -118,7 +118,7 @@ function deleteTask(taskId) {
 
 
 
-    fetch(`https://beehivee.herokuapp.com/api/tasks/delete/${taskId}`, requestOptions)
+    fetch(`${window. location. origin}/api/tasks/delete/${taskId}`, requestOptions)
         .then(response => response.text())
         .then(result => getTasks(beehiveId))
         .catch(error => console.log('error', error));
